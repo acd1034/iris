@@ -1,28 +1,32 @@
-ColumnLimit: 100
-
-UseTab: Never
-IndentWidth: 2
-AccessModifierOffset: 0
-NamespaceIndentation: All
-
+# See https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# generals
 BreakBeforeBraces: Attach
+ColumnLimit: 80
+CommentPragmas: '^ comment: '
+ContinuationIndentWidth: 2
+IndentWidth: 2
+ReflowComments: false
+UseTab: Never
 
+# language core
 AlwaysBreakTemplateDeclarations: true
+BreakBeforeBinaryOperators: NonAssignment
 BreakConstructorInitializers: BeforeColon
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 2
+FixNamespaceComments: true
+IndentPPDirectives: AfterHash
+NamespaceIndentation: All
+PointerAlignment: Left
+
+# for short description
+AlignConsecutiveAssignments: true
+AlignTrailingComments: true
+AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
-
-PointerAlignment: Left
-AlignConsecutiveAssignments: true
-AlignTrailingComments: true
-
 BinPackArguments: false
 BinPackParameters: false
-ConstructorInitializerIndentWidth: 2
-ContinuationIndentWidth: 2
-FixNamespaceComments: true
-
-CommentPragmas: '^ NO-FORMAT:'
+ConstructorInitializerAllOnOneLineOrOnePerLine: true

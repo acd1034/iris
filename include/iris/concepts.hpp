@@ -3,8 +3,8 @@
 #include <iris/type_traits.hpp>
 
 namespace iris {
-#define IRIS_DEFINE_UNARY_OPERATOR_TYPE(Name, Op)                                                  \
-  template <typename T>                                                                            \
+#define IRIS_DEFINE_UNARY_OPERATOR_TYPE(Name, Op)                              \
+  template <typename T>                                                        \
   using Name = decltype(Op std::declval<T>());
   IRIS_DEFINE_UNARY_OPERATOR_TYPE(prefix_increment_t, ++)
   IRIS_DEFINE_UNARY_OPERATOR_TYPE(prefix_decrement_t, --)
@@ -16,8 +16,8 @@ namespace iris {
   IRIS_DEFINE_UNARY_OPERATOR_TYPE(indirection_t, *)
 #undef IRIS_DEFINE_UNARY_OPERATOR_TYPE
 
-#define IRIS_DEFINE_BNARY_OPERATOR_TYPE(Name, Op)                                                  \
-  template <typename T, typename U>                                                                \
+#define IRIS_DEFINE_BNARY_OPERATOR_TYPE(Name, Op)                              \
+  template <typename T, typename U>                                            \
   using Name = decltype(std::declval<T>() Op std::declval<U>());
   IRIS_DEFINE_BNARY_OPERATOR_TYPE(equal_to_t, ==)
   IRIS_DEFINE_BNARY_OPERATOR_TYPE(not_equal_to_t, !=)
@@ -63,15 +63,15 @@ namespace iris {
   template <typename T, typename U>
   using comma_t = decltype(std::declval<T>(), std::declval<U>());
 
-#define IRIS_DEFINE_UNARY_CONCEPT(Name, Type, ...)                                                 \
-  template <typename Type>                                                                         \
-  using Name = std::conjunction<__VA_ARGS__>;                                                      \
-  template <typename Type>                                                                         \
+#define IRIS_DEFINE_UNARY_CONCEPT(Name, Type, ...)                             \
+  template <typename Type>                                                     \
+  using Name = std::conjunction<__VA_ARGS__>;                                  \
+  template <typename Type>                                                     \
   inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type>::value;
-#define IRIS_DEFINE_BNARY_CONCEPT(Name, Type1, Type2, ...)                                         \
-  template <typename Type1, typename Type2>                                                        \
-  using Name = std::conjunction<__VA_ARGS__>;                                                      \
-  template <typename Type1, typename Type2>                                                        \
+#define IRIS_DEFINE_BNARY_CONCEPT(Name, Type1, Type2, ...)                     \
+  template <typename Type1, typename Type2>                                    \
+  using Name = std::conjunction<__VA_ARGS__>;                                  \
+  template <typename Type1, typename Type2>                                    \
   inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2>::value;
   // clang-format off
 IRIS_DEFINE_BNARY_CONCEPT(is_derived_from, T, U,

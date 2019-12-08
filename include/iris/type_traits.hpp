@@ -10,29 +10,41 @@ namespace iris {
       void operator=(nonesuch const&) = delete;
     };
 
-    template <typename Default, typename AlwaysVoid, template <typename...> typename Op,
+    template <typename Default,
+              typename AlwaysVoid,
+              template <typename...> typename Op,
               typename... Args>
     struct detected_or_impl {
       using value_t = std::false_type;
       using type    = Default;
     };
 
-    template <typename Default, template <typename...> typename Op, typename... Args>
+    template <typename Default,
+              template <typename...> typename Op,
+              typename... Args>
     struct detected_or_impl<Default, std::void_t<Op<Args...>>, Op, Args...> {
       using value_t = std::true_type;
       using type    = Op<Args...>;
     };
   } // namespace type_traits
 
-  template <typename Default, template <typename...> typename Op, typename... Args>
+  template <typename Default,
+            template <typename...> typename Op,
+            typename... Args>
   using is_detected_or =
-      typename type_traits::detected_or_impl<Default, void, Op, Args...>::value_t;
+    typename type_traits::detected_or_impl<Default, void, Op, Args...>::value_t;
 
-  template <typename Default, template <typename...> typename Op, typename... Args>
-  using detected_or_t = typename type_traits::detected_or_impl<Default, void, Op, Args...>::type;
+  template <typename Default,
+            template <typename...> typename Op,
+            typename... Args>
+  using detected_or_t =
+    typename type_traits::detected_or_impl<Default, void, Op, Args...>::type;
 
-  template <typename Default, template <typename...> typename Op, typename... Args>
-  inline constexpr bool is_detected_or_v = is_detected_or<Default, Op, Args...>::value;
+  template <typename Default,
+            template <typename...> typename Op,
+            typename... Args>
+  inline constexpr bool is_detected_or_v =
+    is_detected_or<Default, Op, Args...>::value;
 
   template <template <typename...> typename Op, typename... Args>
   using is_detected = is_detected_or<type_traits::nonesuch, Op, Args...>;
@@ -43,34 +55,47 @@ namespace iris {
   template <template <typename...> typename Op, typename... Args>
   inline constexpr bool is_detected_v = is_detected<Op, Args...>::value;
 
-  template <typename Expected, template <typename...> typename Op, typename... Args>
+  template <typename Expected,
+            template <typename...> typename Op,
+            typename... Args>
   using is_detected_exact = std::is_same<Expected, detected_t<Op, Args...>>;
 
-  template <typename Expected, template <typename...> typename Op, typename... Args>
-  inline constexpr bool is_detected_exact_v = is_detected_exact<Expected, Op, Args...>::value;
+  template <typename Expected,
+            template <typename...> typename Op,
+            typename... Args>
+  inline constexpr bool is_detected_exact_v =
+    is_detected_exact<Expected, Op, Args...>::value;
 
   template <typename To, template <typename...> typename Op, typename... Args>
-  using is_detected_convertible = std::is_convertible<detected_t<Op, Args...>, To>;
+  using is_detected_convertible =
+    std::is_convertible<detected_t<Op, Args...>, To>;
 
   template <typename To, template <typename...> typename Op, typename... Args>
-  inline constexpr bool is_detected_convertible_v = is_detected_convertible<To, Op, Args...>::value;
+  inline constexpr bool is_detected_convertible_v =
+    is_detected_convertible<To, Op, Args...>::value;
 
-  template <template <typename> typename Concept, template <typename...> typename Op,
+  template <template <typename> typename Concept,
+            template <typename...> typename Op,
             typename... Args>
   using is_detected_satisfy = Concept<detected_t<Op, Args...>>;
 
-  template <template <typename> typename Concept, template <typename...> typename Op,
+  template <template <typename> typename Concept,
+            template <typename...> typename Op,
             typename... Args>
-  inline constexpr bool is_detected_satisfy_v = is_detected_satisfy<Concept, Op, Args...>::value;
+  inline constexpr bool is_detected_satisfy_v =
+    is_detected_satisfy<Concept, Op, Args...>::value;
 
-  template <template <typename> typename Concept, template <typename...> typename Op,
+  template <template <typename> typename Concept,
+            template <typename...> typename Op,
             typename... Args>
-  using is_detected_dissatisfy = std::negation<is_detected_satisfy<Concept, Op, Args...>>;
+  using is_detected_dissatisfy =
+    std::negation<is_detected_satisfy<Concept, Op, Args...>>;
 
-  template <template <typename> typename Concept, template <typename...> typename Op,
+  template <template <typename> typename Concept,
+            template <typename...> typename Op,
             typename... Args>
   inline constexpr bool is_detected_dissatisfy_v =
-      is_detected_dissatisfy<Concept, Op, Args...>::value;
+    is_detected_dissatisfy<Concept, Op, Args...>::value;
 
   template <typename T>
   struct remove_cvref {
