@@ -43,4 +43,6 @@ namespace iris {
                             std::disjunction<is_detected_dissatisfy<std::is_void, ranges::std_end_t, R&>,
                                              is_detected_dissatisfy<std::is_void, ranges::adl_end_t, R&>>)
   // clang-format on
+#undef IRIS_DEFINE_UNARY_CONCEPT
+#undef IRIS_DEFINE_BNARY_CONCEPT
 }; // namespace iris

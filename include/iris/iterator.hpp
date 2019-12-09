@@ -4,6 +4,7 @@
 #include <iris/concepts.hpp>
 
 namespace iris {
+  // See https://en.cppreference.com/w/cpp/iterator
   namespace iterator {
     template <typename I>
     using class_value_t = typename I::value_type;

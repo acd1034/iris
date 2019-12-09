@@ -2,6 +2,7 @@
 #include <type_traits>
 
 namespace iris {
+  // See https://en.cppreference.com/w/cpp/experimental/is_detected
   namespace type_traits {
     struct nonesuch {
       nonesuch()                = delete;
