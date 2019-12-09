@@ -22,14 +22,14 @@ namespace iris {
   template <typename Type1, typename Type2>                                    \
   inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2>::value;
   // clang-format off
-  IRIS_DEFINE_UNARY_CONCEPT(is_iterator_class, I,
+  IRIS_DEFINE_UNARY_CONCEPT(is_iterator, I,
                             is_copyable<I>,
                             // *i
                             is_detected_dissatisfy<std::is_void, indirection_t, I const&>,
                             // ++i
                             is_detected_exact<I&, prefix_increment_t, I&>)
-  IRIS_DEFINE_UNARY_CONCEPT(is_input_iterator_class, I,
-                            is_iterator_class<I>,
+  IRIS_DEFINE_UNARY_CONCEPT(is_input_iterator, I,
+                            is_iterator<I>,
                             // i++
                             is_detected<suffix_increment_t, I&>,
                             // i.operator->()
@@ -37,21 +37,21 @@ namespace iris {
                             is_detected_satisfy<std::is_signed, iterator::class_difference_type_t, I>,
                             is_detected_dissatisfy<std::is_void, iterator::class_value_type_t, I>/*,
                             // is_common_reference_with<indirection_t<T&>&&, iterator::class_value_type_t<T>&>*/)
-  IRIS_DEFINE_BNARY_CONCEPT(is_output_iterator_class, I, T,
-                            is_iterator_class<I>,
+  IRIS_DEFINE_BNARY_CONCEPT(is_output_iterator, I, T,
+                            is_iterator<I>,
                             // *i = t, *i++ = t
                             std::is_assignable<detected_t<indirection_t, I&>, T const&>,
                             std::is_assignable<detected_t<indirection_t, detected_t<suffix_increment_t, I&>>, T const&>)
-  IRIS_DEFINE_UNARY_CONCEPT(is_forward_iterator_class, I,
-                            is_input_iterator_class<I>,
+  IRIS_DEFINE_UNARY_CONCEPT(is_forward_iterator, I,
+                            is_input_iterator<I>,
                             // == , !=
                             is_equality_comparable<I>)
-  IRIS_DEFINE_UNARY_CONCEPT(is_bidirectional_iterator_class, I,
-                            is_forward_iterator_class<I>,
+  IRIS_DEFINE_UNARY_CONCEPT(is_bidirectional_iterator, I,
+                            is_forward_iterator<I>,
                             // --i
                             is_detected_exact<I&, prefix_decrement_t, I&>)
-  IRIS_DEFINE_UNARY_CONCEPT(is_random_access_iterator_class, I,
-                            is_bidirectional_iterator_class<I>,
+  IRIS_DEFINE_UNARY_CONCEPT(is_random_access_iterator, I,
+                            is_bidirectional_iterator<I>,
                             // <, <=, >, >
                             is_totally_ordered<I>,
                             // i += n, i + n, n + i
@@ -149,8 +149,8 @@ public:                                                                        \
   template <typename I>
   struct iterator_traits<I,
                          std::enable_if_t<std::conjunction_v<
-                           is_input_iterator_class<I>,
-                           std::negation<is_forward_iterator_class<I>>>>> {
+                           is_input_iterator<I>,
+                           std::negation<is_forward_iterator<I>>>>> {
     using iterator_category = std::input_iterator_tag;
     IRIS_DEFINE_ITERATOR_TRAITS_TYPE_ALIASES_1234
     IRIS_DEFINE_ITERATOR_TRAITS_COMMON_12345
@@ -162,11 +162,10 @@ public:                                                                        \
 
   // 2
   template <typename I>
-  struct iterator_traits<
-    I,
-    std::enable_if_t<
-      std::conjunction_v<is_forward_iterator_class<I>,
-                         std::negation<is_bidirectional_iterator_class<I>>>>> {
+  struct iterator_traits<I,
+                         std::enable_if_t<std::conjunction_v<
+                           is_forward_iterator<I>,
+                           std::negation<is_bidirectional_iterator<I>>>>> {
     using iterator_category = std::forward_iterator_tag;
     IRIS_DEFINE_ITERATOR_TRAITS_TYPE_ALIASES_1234
     IRIS_DEFINE_ITERATOR_TRAITS_COMMON_12345
@@ -187,11 +186,10 @@ public:                                                                        \
 
   // 3
   template <typename I>
-  struct iterator_traits<
-    I,
-    std::enable_if_t<
-      std::conjunction_v<is_bidirectional_iterator_class<I>,
-                         std::negation<is_random_access_iterator_class<I>>>>> {
+  struct iterator_traits<I,
+                         std::enable_if_t<std::conjunction_v<
+                           is_bidirectional_iterator<I>,
+                           std::negation<is_random_access_iterator<I>>>>> {
     using iterator_category = std::bidirectional_iterator_tag;
     IRIS_DEFINE_ITERATOR_TRAITS_TYPE_ALIASES_1234
     IRIS_DEFINE_ITERATOR_TRAITS_COMMON_12345
@@ -216,9 +214,7 @@ public:                                                                        \
 
   // 4
   template <typename I>
-  struct iterator_traits<
-    I,
-    std::enable_if_t<is_random_access_iterator_class_v<I>>> {
+  struct iterator_traits<I, std::enable_if_t<is_random_access_iterator_v<I>>> {
     using iterator_category = std::random_access_iterator_tag;
     IRIS_DEFINE_ITERATOR_TRAITS_TYPE_ALIASES_1234
     IRIS_DEFINE_ITERATOR_TRAITS_COMMON_12345
