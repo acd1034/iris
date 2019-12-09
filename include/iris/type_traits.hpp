@@ -89,7 +89,8 @@ namespace iris {
             template <typename...> typename Op,
             typename... Args>
   using is_detected_dissatisfy =
-    std::negation<is_detected_satisfy<Concept, Op, Args...>>;
+    std::conjunction<is_detected<Op, Args...>,
+                     std::negation<is_detected_satisfy<Concept, Op, Args...>>>;
 
   template <template <typename> typename Concept,
             template <typename...> typename Op,
