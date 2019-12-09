@@ -41,7 +41,7 @@ namespace iris {
   IRIS_DEFINE_UNARY_CONCEPT(is_iterator, I,
                             is_copyable<I>,
                             // *i
-                            is_detected_dissatisfy<std::is_void, indirection_t, I const&>,
+                            is_detected_dissatisfy<std::is_void, indirection_t, I&>,
                             // ++i
                             is_detected_exact<I&, prefix_increment_t, I&>)
   IRIS_DEFINE_UNARY_CONCEPT(is_input_iterator, I,
