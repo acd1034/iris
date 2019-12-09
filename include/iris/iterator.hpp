@@ -52,7 +52,7 @@ namespace iris {
                             is_detected_dissatisfy<std::is_void, element_selection_t, I const&>,
                             is_detected_satisfy<std::is_signed, iterator::class_difference_t, I>,
                             is_detected_dissatisfy<std::is_void, iterator::class_value_t, I>,
-                            is_common_reference_with<detected_t<indirection_t, I&>&&, detected_t<iterator::class_value_t, I>&>)
+                            is_common_reference<detected_t<indirection_t, I&>&&, detected_t<iterator::class_value_t, I>&>)
   IRIS_DEFINE_BNARY_CONCEPT(is_output_iterator, I, T,
                             is_iterator<I>,
                             // *i = t, *i++ = t

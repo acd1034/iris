@@ -77,16 +77,16 @@ namespace iris {
 IRIS_DEFINE_BNARY_CONCEPT(is_derived_from, T, U,
                           std::is_base_of<U, T>,
                           std::is_convertible<std::remove_cv_t<T>*, std::remove_cv_t<U>*>)
-IRIS_DEFINE_BNARY_CONCEPT(is_common_reference_with, T, U,
+IRIS_DEFINE_BNARY_CONCEPT(is_common_reference, T, U,
                           std::is_same<detected_t<common_reference_t, T, U>, detected_t<common_reference_t, U, T>>,
                           std::is_convertible<T, detected_t<common_reference_t, T, U>>,
                           std::is_convertible<U, detected_t<common_reference_t, T, U>>)
-IRIS_DEFINE_BNARY_CONCEPT(is_common_with, T, U,
+IRIS_DEFINE_BNARY_CONCEPT(is_common, T, U,
                           std::is_same<detected_t<std::common_type_t, T, U>, detected_t<std::common_type_t, U, T>>,
                           std::is_convertible<T, detected_t<std::common_type_t, T, U>>,
                           std::is_convertible<U, detected_t<std::common_type_t, T, U>>,
-                          is_common_reference_with<std::add_lvalue_reference_t<T const>, std::add_lvalue_reference_t<U const>>,
-                          is_common_reference_with<
+                          is_common_reference<std::add_lvalue_reference_t<T const>, std::add_lvalue_reference_t<U const>>,
+                          is_common_reference<
                             std::add_lvalue_reference_t<detected_t<std::common_type_t, T, U>>,
                             detected_t<common_reference_t, std::add_lvalue_reference_t<T const>, std::add_lvalue_reference_t<U const>>>)
 IRIS_DEFINE_UNARY_CONCEPT(is_boolean, T,
@@ -114,7 +114,7 @@ IRIS_DEFINE_UNARY_CONCEPT(is_equality_comparable, T,
 IRIS_DEFINE_BNARY_CONCEPT(is_equality_comparable_with, T, U,
                           is_equality_comparable<T>,
                           is_equality_comparable<U>,
-                          is_common_reference_with<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
+                          is_common_reference<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
                           is_equality_comparable<detected_t<common_reference_t, std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>>,
                           is_weakly_comparable_with<T, U>)
 IRIS_DEFINE_UNARY_CONCEPT(is_totally_ordered, T,
@@ -126,7 +126,7 @@ IRIS_DEFINE_UNARY_CONCEPT(is_totally_ordered, T,
 IRIS_DEFINE_BNARY_CONCEPT(is_totally_ordered_with, T, U,
                           is_totally_ordered<T>,
                           is_totally_ordered<U>,
-                          is_common_reference_with<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
+                          is_common_reference<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
                           is_totally_ordered<detected_t<common_reference_t, std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>>,
                           is_equality_comparable_with<T, U>,
                           is_detected_satisfy<is_boolean, less_t, std::remove_reference_t<U> const&, std::remove_reference_t<T> const&>,
