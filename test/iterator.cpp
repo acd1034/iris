@@ -23,25 +23,25 @@ namespace ns {
 
 TEST_CASE("iterator concept", "[iterator]") {
   // clang-format off
-  static_assert( iris::is_output_iterator_class_v<std::ostream_iterator<int>, int>);
-  static_assert( iris::is_output_iterator_class_v<std::back_insert_iterator<std::forward_list<int>>, int>);
-  static_assert( iris::is_output_iterator_class_v<std::forward_list<int>::iterator, int>);
-  static_assert(!iris::is_output_iterator_class_v<std::move_iterator<std::list<int>::iterator>, int>);
+  static_assert( iris::is_output_iterator_v<std::ostream_iterator<int>, int>);
+  static_assert( iris::is_output_iterator_v<std::back_insert_iterator<std::forward_list<int>>, int>);
+  static_assert( iris::is_output_iterator_v<std::forward_list<int>::iterator, int>);
+  static_assert(!iris::is_output_iterator_v<std::move_iterator<std::list<int>::iterator>, int>);
 
-  static_assert(!iris::is_input_iterator_class_v<int*>);
-  static_assert( iris::is_input_iterator_class_v<std::istream_iterator<int>>);
-  static_assert( iris::is_forward_iterator_class_v<std::istream_iterator<int>>);
-  static_assert( iris::is_forward_iterator_class_v<std::forward_list<int>::iterator>);
-  static_assert( iris::is_forward_iterator_class_v<ns::mini_iter>);
-  static_assert(!iris::is_bidirectional_iterator_class_v<std::forward_list<int>::iterator>);
-  static_assert(!iris::is_bidirectional_iterator_class_v<ns::mini_iter>);
-  static_assert( iris::is_bidirectional_iterator_class_v<std::list<int>::iterator>);
-  static_assert( iris::is_bidirectional_iterator_class_v<std::move_iterator<std::list<int>::iterator>>);
-  static_assert( iris::is_bidirectional_iterator_class_v<std::reverse_iterator<std::list<int>::iterator>>);
-  static_assert(!iris::is_random_access_iterator_class_v<std::list<int>::iterator>);
-  static_assert(!iris::is_random_access_iterator_class_v<std::move_iterator<std::list<int>::iterator>>);
-  static_assert(!iris::is_random_access_iterator_class_v<std::reverse_iterator<std::list<int>::iterator>>);
-  static_assert( iris::is_random_access_iterator_class_v<std::vector<int>::iterator>);
+  static_assert(!iris::is_input_iterator_v<int*>);
+  static_assert( iris::is_input_iterator_v<std::istream_iterator<int>>);
+  static_assert( iris::is_forward_iterator_v<std::istream_iterator<int>>);
+  static_assert( iris::is_forward_iterator_v<std::forward_list<int>::iterator>);
+  static_assert( iris::is_forward_iterator_v<ns::mini_iter>);
+  static_assert(!iris::is_bidirectional_iterator_v<std::forward_list<int>::iterator>);
+  static_assert(!iris::is_bidirectional_iterator_v<ns::mini_iter>);
+  static_assert( iris::is_bidirectional_iterator_v<std::list<int>::iterator>);
+  static_assert( iris::is_bidirectional_iterator_v<std::move_iterator<std::list<int>::iterator>>);
+  static_assert( iris::is_bidirectional_iterator_v<std::reverse_iterator<std::list<int>::iterator>>);
+  static_assert(!iris::is_random_access_iterator_v<std::list<int>::iterator>);
+  static_assert(!iris::is_random_access_iterator_v<std::move_iterator<std::list<int>::iterator>>);
+  static_assert(!iris::is_random_access_iterator_v<std::reverse_iterator<std::list<int>::iterator>>);
+  static_assert( iris::is_random_access_iterator_v<std::vector<int>::iterator>);
   // clang-format on
 }
 
