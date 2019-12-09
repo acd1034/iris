@@ -74,6 +74,7 @@ namespace iris {
   inline constexpr bool is_detected_convertible_v =
     is_detected_convertible<To, Op, Args...>::value;
 
+  // detected_satisfy == (detected && satisfy)
   template <template <typename> typename Concept,
             template <typename...> typename Op,
             typename... Args>
@@ -85,6 +86,7 @@ namespace iris {
   inline constexpr bool is_detected_satisfy_v =
     is_detected_satisfy<Concept, Op, Args...>::value;
 
+  // detected_dissatisfy == (detected && !satisfy) != !detected_satisfy
   template <template <typename> typename Concept,
             template <typename...> typename Op,
             typename... Args>
