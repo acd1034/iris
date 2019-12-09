@@ -25,7 +25,7 @@ namespace iris {
   // template <typename I>
   // using iter_difference_t = detected_t<iterator::class_difference_t, I>;
   template <typename I>
-  using iter_pointer_t = detected_t<element_selection_t, I const&>;
+  using iter_pointer_t = detected_t<member_selection_t, I const&>;
 
 #define IRIS_DEFINE_UNARY_CONCEPT(Name, Type, ...)                             \
   template <typename Type>                                                     \
@@ -47,9 +47,9 @@ namespace iris {
   IRIS_DEFINE_UNARY_CONCEPT(is_input_iterator, I,
                             is_iterator<I>,
                             // i++
-                            is_detected<suffix_increment_t, I&>,
+                            is_detected<postfix_increment_t, I&>,
                             // i.operator->()
-                            is_detected_dissatisfy<std::is_void, element_selection_t, I const&>,
+                            is_detected_dissatisfy<std::is_void, member_selection_t, I const&>,
                             is_detected_satisfy<std::is_signed, iterator::class_difference_t, I>,
                             is_detected_dissatisfy<std::is_void, iterator::class_value_t, I>,
                             is_common_reference<detected_t<indirection_t, I&>&&, detected_t<iterator::class_value_t, I>&>)
@@ -57,7 +57,7 @@ namespace iris {
                             is_iterator<I>,
                             // *i = t, *i++ = t
                             std::is_assignable<detected_t<indirection_t, I&>, T const&>,
-                            std::is_assignable<detected_t<indirection_t, detected_t<suffix_increment_t, I&>>, T const&>)
+                            std::is_assignable<detected_t<indirection_t, detected_t<postfix_increment_t, I&>>, T const&>)
   IRIS_DEFINE_UNARY_CONCEPT(is_forward_iterator, I,
                             is_input_iterator<I>,
                             // == , !=
@@ -97,7 +97,7 @@ private:                                                                       \
                                                                                \
 public:                                                                        \
   using difference_type = detected_t<iterator::class_difference_t, I>;         \
-  using pointer         = detected_t<element_selection_t, I const&>;           \
+  using pointer         = detected_t<member_selection_t, I const&>;            \
   using reference       = detected_t<indirection_t, I const&>;                 \
   using value_type      = detected_t<iterator::class_value_t, I>;              \
   static pointer to_address(iterator_type const& iter) noexcept {              \

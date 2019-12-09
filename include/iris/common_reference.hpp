@@ -82,26 +82,19 @@ namespace iris {
     using __rref_res =
       std::conditional_t<__v<std::is_reference<R>>, std::remove_reference_t<R>&&, R>;
     template <class T, class U>
-    struct __builtin_common<
-      T&&,
-      U&&,
-      std::enable_if_t<
-        _Valid<
-          __builtin_common_t,
-          T&,
-          U&> && _ConvertibleTo<T&&, __rref_res<T, U>> && _ConvertibleTo<U&&, __rref_res<T, U>>>>
+    struct __builtin_common<T&&, U&&,
+      std::enable_if_t<_Valid<__builtin_common_t, T&, U&>
+        && _ConvertibleTo<T&&, __rref_res<T, U>>
+        && _ConvertibleTo<U&&, __rref_res<T, U>>>>
       : __id<__rref_res<T, U>> {};
     template <class T, class U>
     using __lref_res = __cond_res<__copycv<T, U>&, __copycv<U, T>&>;
     template <class T, class U>
     struct __builtin_common<T&, U&> : __defer<void, __lref_res, T, U> {};
     template <class T, class U>
-    struct __builtin_common<
-      T&,
-      U&&,
-      std::enable_if_t<_Valid<__builtin_common_t,
-                              T&,
-                              U const&> && _ConvertibleTo<U&&, __builtin_common_t<T&, U const&>>>>
+    struct __builtin_common<T&, U&&,
+      std::enable_if_t<_Valid<__builtin_common_t, T&, U const&>
+        && _ConvertibleTo<U&&, __builtin_common_t<T&, U const&>>>>
       : __builtin_common<T&, U const&> {};
     template <class T, class U>
     struct __builtin_common<T&&, U&> : __builtin_common<U&, T&&> {};
@@ -176,11 +169,9 @@ namespace iris {
                                                     common_type<void, T, U>> {};
 
     template <class T, class U>
-    struct __common_reference2<
-      T,
-      U,
-      std::enable_if_t<
-        _Valid<__builtin_common_t, T, U> && _Is<__builtin_common_t<T, U>, std::is_reference>>>
+    struct __common_reference2<T, U,
+      std::enable_if_t<_Valid<__builtin_common_t, T, U>
+        && _Is<__builtin_common_t<T, U>, std::is_reference>>>
       : __builtin_common<T, U> {};
 
     template <class T, class U>

@@ -14,7 +14,6 @@ BreakBeforeBinaryOperators: NonAssignment
 BreakConstructorInitializers: BeforeColon
 ConstructorInitializerIndentWidth: 2
 FixNamespaceComments: true
-IndentPPDirectives: AfterHash
 NamespaceIndentation: All
 PointerAlignment: Left
 
