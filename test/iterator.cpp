@@ -53,35 +53,35 @@ TEST_CASE("iterator operation", "[iterator]") {
     auto i = std::begin(a);
     using It = decltype(i);
     static_assert(std::is_same_v<iris::iterator_traits<It>::iterator_category, std::forward_iterator_tag>);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 0);
-    REQUIRE(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 1);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 1);
-    REQUIRE(iris::iterator_traits<It>::at(i, 2) == 3);
-    REQUIRE(a == Array{0,1,2,3,4});
+    CHECK(iris::iterator_traits<It>::deref(i) == 0);
+    CHECK(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
+    CHECK(iris::iterator_traits<It>::deref(i) == 1);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
+    CHECK(iris::iterator_traits<It>::deref(i) == 1);
+    CHECK(iris::iterator_traits<It>::at(i, 2) == 3);
+    CHECK(a == Array{0,1,2,3,4});
     int n = -1;
     iris::iterator_traits<It>::assign(i, n);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == -1);
-    REQUIRE(a == Array{0,-1,2,3,4});
+    CHECK(iris::iterator_traits<It>::deref(i) == -1);
+    CHECK(a == Array{0,-1,2,3,4});
   }
   {
     using Array = std::forward_list<int>;
     Array a{0,1,2,3,4};
     using It = decltype(std::begin(a));
     static_assert(std::is_same_v<iris::iterator_traits<It>::iterator_category, std::forward_iterator_tag>);
-    REQUIRE(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
-    REQUIRE(iris::iterator_traits<It>::distance(std::begin(a), std::end(a)) == 5);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(std::begin(a))) == 1);
-    REQUIRE(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(std::begin(a))) == 1);
-    REQUIRE(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
+    CHECK(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
+    CHECK(iris::iterator_traits<It>::distance(std::begin(a), std::end(a)) == 5);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(std::begin(a))) == 1);
+    CHECK(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(std::begin(a))) == 1);
+    CHECK(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
     iris::iterator_traits<It>::at(std::begin(a),2) = -1;
-    REQUIRE(a == Array{0,1,-1,3,4});
+    CHECK(a == Array{0,1,-1,3,4});
     iris::iterator_traits<It>::assign(std::begin(a), -1);
-    REQUIRE(iris::iterator_traits<It>::deref(std::begin(a)) == -1);
-    REQUIRE(a == Array{-1,1,-1,3,4});
+    CHECK(iris::iterator_traits<It>::deref(std::begin(a)) == -1);
+    CHECK(a == Array{-1,1,-1,3,4});
   }
   {
     using Array = std::list<int>;
@@ -89,32 +89,32 @@ TEST_CASE("iterator operation", "[iterator]") {
     auto i = std::begin(a);
     using It = decltype(i);
     static_assert(std::is_same_v<iris::iterator_traits<It>::iterator_category, std::bidirectional_iterator_tag>);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 0);
-    REQUIRE(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 1);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 1);
-    REQUIRE(iris::iterator_traits<It>::at(i, 2) == 3);
-    REQUIRE(a == Array{0,1,2,3,4});
+    CHECK(iris::iterator_traits<It>::deref(i) == 0);
+    CHECK(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
+    CHECK(iris::iterator_traits<It>::deref(i) == 1);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
+    CHECK(iris::iterator_traits<It>::deref(i) == 1);
+    CHECK(iris::iterator_traits<It>::at(i, 2) == 3);
+    CHECK(a == Array{0,1,2,3,4});
     iris::iterator_traits<It>::assign(i, -1);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == -1);
-    REQUIRE(a == Array{0,-1,2,3,4});
+    CHECK(iris::iterator_traits<It>::deref(i) == -1);
+    CHECK(a == Array{0,-1,2,3,4});
   }
   {
     using Array = std::list<int>;
     Array a{0,1,2,3,4};
     auto i = std::end(a);
     using It = decltype(i);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::retreat(i)) == 4);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 4);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::prev(i)) == 3);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 4);
-    REQUIRE(iris::iterator_traits<It>::at(i, -2) == 2);
-    REQUIRE(a == Array{0,1,2,3,4});
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::retreat(i)) == 4);
+    CHECK(iris::iterator_traits<It>::deref(i) == 4);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::prev(i)) == 3);
+    CHECK(iris::iterator_traits<It>::deref(i) == 4);
+    CHECK(iris::iterator_traits<It>::at(i, -2) == 2);
+    CHECK(a == Array{0,1,2,3,4});
     iris::iterator_traits<It>::assign(i, -1);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == -1);
-    REQUIRE(a == Array{0,1,2,3,-1});
+    CHECK(iris::iterator_traits<It>::deref(i) == -1);
+    CHECK(a == Array{0,1,2,3,-1});
   }
   {
     using Array = int[];
@@ -122,17 +122,17 @@ TEST_CASE("iterator operation", "[iterator]") {
     auto i = std::begin(a);
     using It = decltype(i);
     static_assert(std::is_same_v<iris::iterator_traits<It>::iterator_category, std::random_access_iterator_tag>);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 0);
-    REQUIRE(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 1);
-    REQUIRE(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == 1);
-    REQUIRE(iris::iterator_traits<It>::at(i, 2) == 3);
-    REQUIRE(iris::equal(a, Array{0,1,2,3,4}));
+    CHECK(iris::iterator_traits<It>::deref(i) == 0);
+    CHECK(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
+    CHECK(iris::iterator_traits<It>::deref(i) == 1);
+    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
+    CHECK(iris::iterator_traits<It>::deref(i) == 1);
+    CHECK(iris::iterator_traits<It>::at(i, 2) == 3);
+    CHECK(iris::equal(a, Array{0,1,2,3,4}));
     iris::iterator_traits<It>::assign(i, -1);
-    REQUIRE(iris::iterator_traits<It>::deref(i) == -1);
-    REQUIRE(iris::equal(a, Array{0,-1,2,3,4}));
+    CHECK(iris::iterator_traits<It>::deref(i) == -1);
+    CHECK(iris::equal(a, Array{0,-1,2,3,4}));
   }
   // clang-format on
 }
