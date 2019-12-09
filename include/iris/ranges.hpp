@@ -36,8 +36,11 @@ namespace iris {
   using Name = std::conjunction<__VA_ARGS__>;                                  \
   template <typename Type1, typename Type2>                                    \
   inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2>::value;
-  IRIS_DEFINE_UNARY_CONCEPT(is_range_class,
-                            R,
-                            is_detected<ranges::class_begin_t, R&>,
-                            is_detected<ranges::class_end_t, R&>)
+  // clang-format off
+  IRIS_DEFINE_UNARY_CONCEPT(is_range, R,
+                            std::disjunction<is_detected<ranges::std_begin_t, R&>,
+                                             is_detected<ranges::adl_begin_t, R&>>,
+                            std::disjunction<is_detected<ranges::std_end_t, R&>,
+                                             is_detected<ranges::adl_end_t, R&>>)
+  // clang-format on
 }; // namespace iris
