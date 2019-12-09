@@ -12,8 +12,8 @@ namespace iris {
   IRIS_DEFINE_UNARY_OPERATOR_TYPE(negate_t, -)
   IRIS_DEFINE_UNARY_OPERATOR_TYPE(bit_not_t, ~)
   IRIS_DEFINE_UNARY_OPERATOR_TYPE(logical_not_t, !)
-  IRIS_DEFINE_UNARY_OPERATOR_TYPE(address_of_t, &)
-  IRIS_DEFINE_UNARY_OPERATOR_TYPE(indirection_t, *)
+  IRIS_DEFINE_UNARY_OPERATOR_TYPE(address_of_t, &)  // name?
+  IRIS_DEFINE_UNARY_OPERATOR_TYPE(indirection_t, *) // name?
 #undef IRIS_DEFINE_UNARY_OPERATOR_TYPE
 
 #define IRIS_DEFINE_BNARY_OPERATOR_TYPE(Name, Op)                              \
@@ -51,7 +51,7 @@ namespace iris {
 #undef IRIS_DEFINE_BNARY_OPERATOR_TYPE
 
   template <typename T>
-  using element_selection_t = decltype(std::declval<T>().operator->());
+  using element_selection_t = decltype(std::declval<T>().operator->()); // name?
   template <typename T>
   using suffix_increment_t = decltype(std::declval<T>()++);
   template <typename T>
