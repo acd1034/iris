@@ -6,10 +6,26 @@
 namespace iris {
   namespace iterator {
     template <typename I>
-    using class_difference_type_t = typename I::difference_type;
+    using class_value_t = typename I::value_type;
     template <typename I>
-    using class_value_type_t = typename I::value_type;
+    using class_difference_t = typename I::difference_type;
   } // namespace iterator
+  template <typename I>
+  using iter_value_t = std::remove_cv_t<detected_t<iterator::class_value_t, I>>;
+  // alias templateは特殊化できない
+  // template <typename T>
+  // using iter_value_t<T*> = std::remove_cv_t<T>;
+  // template <typename T, std::size_t N>
+  // using iter_value_t<T(&)[N]> = std::remove_cv_t<T>;
+  template <typename I>
+  using iter_reference_t = detected_t<indirection_t, I const&>;
+  // 要検討
+  // template <typename I>
+  // using iter_rvalue_reference_t = decltype(ranges::iter_move(std::declval<I&>()));
+  // template <typename I>
+  // using iter_difference_t = detected_t<iterator::class_difference_t, I>;
+  template <typename I>
+  using iter_pointer_t = detected_t<element_selection_t, I const&>;
 
 #define IRIS_DEFINE_UNARY_CONCEPT(Name, Type, ...)                             \
   template <typename Type>                                                     \
@@ -34,9 +50,9 @@ namespace iris {
                             is_detected<suffix_increment_t, I&>,
                             // i.operator->()
                             is_detected_dissatisfy<std::is_void, element_selection_t, I const&>,
-                            is_detected_satisfy<std::is_signed, iterator::class_difference_type_t, I>,
-                            is_detected_dissatisfy<std::is_void, iterator::class_value_type_t, I>/*,
-                            // is_common_reference_with<indirection_t<T&>&&, iterator::class_value_type_t<T>&>*/)
+                            is_detected_satisfy<std::is_signed, iterator::class_difference_t, I>,
+                            is_detected_dissatisfy<std::is_void, iterator::class_value_t, I>/*,
+                            // is_common_reference_with<indirection_t<T&>&&, iterator::class_value_t<T>&>*/)
   IRIS_DEFINE_BNARY_CONCEPT(is_output_iterator, I, T,
                             is_iterator<I>,
                             // *i = t, *i++ = t
@@ -55,16 +71,16 @@ namespace iris {
                             // <, <=, >, >
                             is_totally_ordered<I>,
                             // i += n, i + n, n + i
-                            is_detected_exact<I&, plus_assign_t, I&, detected_t<iterator::class_difference_type_t, I> const>,
-                            is_detected_exact<I, plus_t, I, detected_t<iterator::class_difference_type_t, I> const>,
-                            is_detected_exact<I, plus_t, detected_t<iterator::class_difference_type_t, I> const, I>,
+                            is_detected_exact<I&, plus_assign_t, I&, detected_t<iterator::class_difference_t, I> const>,
+                            is_detected_exact<I, plus_t, I, detected_t<iterator::class_difference_t, I> const>,
+                            is_detected_exact<I, plus_t, detected_t<iterator::class_difference_t, I> const, I>,
                             // i -= n, i - n
-                            is_detected_exact<I&, minus_assign_t, I&, detected_t<iterator::class_difference_type_t, I> const>,
-                            is_detected_exact<I, minus_t, I, detected_t<iterator::class_difference_type_t, I> const>,
+                            is_detected_exact<I&, minus_assign_t, I&, detected_t<iterator::class_difference_t, I> const>,
+                            is_detected_exact<I, minus_t, I, detected_t<iterator::class_difference_t, I> const>,
                             // i - j
-                            is_detected_exact<detected_t<iterator::class_difference_type_t, I>, minus_t, I, I>,
+                            is_detected_exact<detected_t<iterator::class_difference_t, I>, minus_t, I, I>,
                             // i[n]
-                            is_detected_exact<indirection_t<I const&>, array_subscripting_t, I const&, detected_t<iterator::class_difference_type_t, I> const>)
+                            is_detected_exact<indirection_t<I const&>, array_subscript_t, I const&, detected_t<iterator::class_difference_t, I> const>)
   // clang-format on
 #undef IRIS_DEFINE_UNARY_CONCEPT
 #undef IRIS_DEFINE_BNARY_CONCEPT
@@ -80,10 +96,10 @@ private:                                                                       \
   using iterator_type = I;                                                     \
                                                                                \
 public:                                                                        \
-  using difference_type = detected_t<iterator::class_difference_type_t, I>;    \
+  using difference_type = detected_t<iterator::class_difference_t, I>;         \
   using pointer         = detected_t<element_selection_t, I const&>;           \
   using reference       = detected_t<indirection_t, I const&>;                 \
-  using value_type      = detected_t<iterator::class_value_type_t, I>;         \
+  using value_type      = detected_t<iterator::class_value_t, I>;              \
   static pointer to_address(iterator_type const& iter) noexcept {              \
     return iter.operator->();                                                  \
   }

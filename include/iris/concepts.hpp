@@ -57,7 +57,7 @@ namespace iris {
   template <typename T>
   using suffix_decrement_t = decltype(std::declval<T>()--);
   template <typename T, typename U>
-  using array_subscripting_t = decltype(std::declval<T>()[std::declval<U>()]);
+  using array_subscript_t = decltype(std::declval<T>()[std::declval<U>()]);
   template <typename T, typename... Args>
   using function_call_t = decltype(std::declval<T>()(std::declval<Args>()...));
   template <typename T, typename U>
