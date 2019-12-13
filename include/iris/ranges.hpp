@@ -2,6 +2,7 @@
 #include <iris/iterator.hpp>
 
 namespace iris {
+  // See https://en.cppreference.com/w/cpp/ranges
   namespace ranges {
     template <typename R>
     using std_begin_t = decltype(std::begin(std::declval<R>()));
@@ -42,6 +43,24 @@ namespace iris {
                                              is_detected<ranges::adl_begin_t, R&>>,
                             std::disjunction<is_detected<ranges::std_end_t, R&>,
                                              is_detected<ranges::adl_end_t, R&>>)
+  IRIS_DEFINE_UNARY_CONCEPT(is_iterator_range, R,
+                            is_range<R>,
+                            is_iterator<iterator_t<R>>)
+  IRIS_DEFINE_UNARY_CONCEPT(is_input_range, R,
+                            is_range<R>,
+                            is_input_iterator<iterator_t<R>>)
+  IRIS_DEFINE_BNARY_CONCEPT(is_output_range, R, T,
+                            is_range<R>,
+                            is_output_iterator<iterator_t<R>, T>)
+  IRIS_DEFINE_UNARY_CONCEPT(is_forward_range, R,
+                            is_range<R>,
+                            is_forward_iterator<iterator_t<R>>)
+  IRIS_DEFINE_UNARY_CONCEPT(is_bidirectional_range, R,
+                            is_range<R>,
+                            is_bidirectional_iterator<iterator_t<R>>)
+  IRIS_DEFINE_UNARY_CONCEPT(is_random_access_range, R,
+                            is_range<R>,
+                            is_random_access_iterator<iterator_t<R>>)
   // clang-format on
 #undef IRIS_DEFINE_UNARY_CONCEPT
 #undef IRIS_DEFINE_BNARY_CONCEPT

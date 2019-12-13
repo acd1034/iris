@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 #include <catch.hpp>
 #include <iris/iterator.hpp>
+#include <iris/ranges.hpp>
 #include <iris/utility.hpp>
 
 namespace ns {
@@ -42,6 +43,12 @@ TEST_CASE("iterator concept", "[iterator]") {
   static_assert(!iris::is_random_access_iterator_v<std::move_iterator<std::list<int>::iterator>>);
   static_assert(!iris::is_random_access_iterator_v<std::reverse_iterator<std::list<int>::iterator>>);
   static_assert( iris::is_random_access_iterator_v<std::vector<int>::iterator>);
+
+  static_assert( iris::is_forward_range_v<std::forward_list<int>>);
+  static_assert(!iris::is_bidirectional_range_v<std::forward_list<int>>);
+  static_assert( iris::is_bidirectional_range_v<std::list<int>>);
+  static_assert(!iris::is_random_access_range_v<std::list<int>>);
+  static_assert( iris::is_random_access_range_v<std::vector<int>>);
   // clang-format on
 }
 

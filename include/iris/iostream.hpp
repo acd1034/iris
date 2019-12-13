@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <iostream> // std::basic_ostream
 
 #include <iris/ranges.hpp>
 
