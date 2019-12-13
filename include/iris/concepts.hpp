@@ -177,19 +177,19 @@ namespace iris {
                             std::disjunction<is_detected<concepts::std_swap_t, U&, T&>,
                                              is_detected<concepts::adl_swap_t, U&, T&>>)
   // compare
-  IRIS_DEFINE_BNARY_CONCEPT(is_weakly_comparable_with, T, U,
+  IRIS_DEFINE_BNARY_CONCEPT(is_weakly_equality_comparable_with, T, U,
                             is_detected_satisfy<is_boolean, concepts::equal_to_t, std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
                             is_detected_satisfy<is_boolean, concepts::equal_to_t, std::remove_reference_t<U> const&, std::remove_reference_t<T> const&>,
                             is_detected_satisfy<is_boolean, concepts::not_equal_to_t, std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
                             is_detected_satisfy<is_boolean, concepts::not_equal_to_t, std::remove_reference_t<U> const&, std::remove_reference_t<T> const&>)
   IRIS_DEFINE_UNARY_CONCEPT(is_equality_comparable, T,
-                            is_weakly_comparable_with<T, T>)
+                            is_weakly_equality_comparable_with<T, T>)
   IRIS_DEFINE_BNARY_CONCEPT(is_equality_comparable_with, T, U,
                             is_equality_comparable<T>,
                             is_equality_comparable<U>,
                             is_common_reference_with<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
                             is_equality_comparable<concepts::common_reference_t<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>>,
-                            is_weakly_comparable_with<T, U>)
+                            is_weakly_equality_comparable_with<T, U>)
   IRIS_DEFINE_UNARY_CONCEPT(is_totally_ordered, T,
                             is_equality_comparable<T>,
                             is_detected_satisfy<is_boolean, concepts::less_t, std::remove_reference_t<T> const&, std::remove_reference_t<T> const&>,

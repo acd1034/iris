@@ -1,7 +1,10 @@
+# Generic Concepts
 進捗：`iris`なし以外
+
 https://en.cppreference.com/w/cpp/concepts
 https://cpprefjp.github.io/reference/concepts.html
-# 型の関係
+
+## 型の関係
 |name|at|
 |:--|:--|
 |`same_as`|`iris`|
@@ -10,7 +13,7 @@ https://cpprefjp.github.io/reference/concepts.html
 |`common_reference_with`|``|
 |`common_with`|``|
 
-# 型の種類
+## 型の種類
 |name|at|
 |:--|:--|
 |`integral`|`std::is_integral`|
@@ -19,7 +22,7 @@ https://cpprefjp.github.io/reference/concepts.html
 |`boolean`|``|
 |`floating_point`|`std::is_floating_point`|
 
-# 型の構築・破棄・代入操作
+## 型の構築・破棄・代入操作
 |name|at|
 |:--|:--|
 |`destructible`|`iris`|
@@ -31,7 +34,7 @@ https://cpprefjp.github.io/reference/concepts.html
 |`swappable`|`iris`|
 |`swappable_with`|`iris`|
 
-# 比較
+## 比較
 |name|at|
 |:--|:--|
 |`equality_comparable`|``|
@@ -39,7 +42,7 @@ https://cpprefjp.github.io/reference/concepts.html
 |`totally_ordered	狭義`|``|
 |`totally_ordered_with`|``|
 
-# 値指向の操作
+## 値指向の操作
 |name|at|
 |:--|:--|
 |`movable`|`iris`|

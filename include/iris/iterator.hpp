@@ -40,28 +40,37 @@ namespace iris {
   inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2>::value;
   // clang-format off
   IRIS_DEFINE_UNARY_CONCEPT(is_iterator, I,
+                            // 標準はdefault_constructibleを課す(何故?)
                             is_copyable<I>,
                             // *i
                             is_detected_dissatisfy<std::is_void, concepts::indirection_t, I&>,
-                            // ++i
-                            is_detected_exact<I&, concepts::prefix_increment_t, I&>)
+                            // ++i, i++
+                            is_detected_exact<I&, concepts::prefix_increment_t, I&>,
+                            is_detected<concepts::postfix_increment_t, I&>)
+  IRIS_DEFINE_BNARY_CONCEPT(is_sentinel_for, S, I,
+                            is_iterator<I>,
+                            // ==, !=
+                            is_weakly_equality_comparable_with<S, I>)
   IRIS_DEFINE_UNARY_CONCEPT(is_input_iterator, I,
                             is_iterator<I>,
-                            // i++
-                            is_detected<concepts::postfix_increment_t, I&>,
-                            // i.operator->()
-                            is_detected_dissatisfy<std::is_void, concepts::member_selection_t, I const&>,
-                            is_detected_satisfy<std::is_signed, iterator::class_difference_t, I>,
+                            // i.operator->(). 標準はどこにも課さない
+                            // is_detected_dissatisfy<std::is_void, concepts::member_selection_t, I&>,
+                            is_detected_satisfy<is_signed_integral, iterator::class_difference_t, I>,
                             is_detected_dissatisfy<std::is_void, iterator::class_value_t, I>,
                             is_common_reference_with<detected_t<concepts::indirection_t, I&>&&, detected_t<iterator::class_value_t, I>&>)
   IRIS_DEFINE_BNARY_CONCEPT(is_output_iterator, I, T,
                             is_iterator<I>,
-                            // *i = t, *i++ = t
-                            std::is_assignable<detected_t<concepts::indirection_t, I&>, T const&>,
-                            std::is_assignable<detected_t<concepts::indirection_t, detected_t<concepts::postfix_increment_t, I&>>, T const&>)
+                            // *i = t, *i++ = t. is_assignable_fromは満たさない
+                            is_detected_exact<detected_t<concepts::indirection_t, I&>, concepts::assign_t, detected_t<concepts::indirection_t, I&>, T const&>,
+                            is_detected_exact<detected_t<concepts::indirection_t, detected_t<concepts::postfix_increment_t, I&>>,
+                                              concepts::assign_t,
+                                              detected_t<concepts::indirection_t, detected_t<concepts::postfix_increment_t, I&>>,
+                                              T const&>)
   IRIS_DEFINE_UNARY_CONCEPT(is_forward_iterator, I,
                             is_input_iterator<I>,
-                            // == , !=
+                            // i++
+                            is_detected_exact<I, concepts::postfix_increment_t, I&>,
+                            // ==, !=
                             is_equality_comparable<I>)
   IRIS_DEFINE_UNARY_CONCEPT(is_bidirectional_iterator, I,
                             is_forward_iterator<I>,
