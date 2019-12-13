@@ -3,8 +3,8 @@ supported metafunctions:
 
 `<concepts>`
 - `is_derived_from`
-- `is_common_reference`
-- `is_common`
+- `is_common_reference_with`
+- `is_common_with`
 - `is_boolean`
 - `is_weakly_comparable_with`
 - `is_equality_comparable`
