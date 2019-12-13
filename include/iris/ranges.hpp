@@ -38,10 +38,10 @@ namespace iris {
   inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2>::value;
   // clang-format off
   IRIS_DEFINE_UNARY_CONCEPT(is_range, R,
-                            std::disjunction<is_detected_dissatisfy<std::is_void, ranges::std_begin_t, R&>,
-                                             is_detected_dissatisfy<std::is_void, ranges::adl_begin_t, R&>>,
-                            std::disjunction<is_detected_dissatisfy<std::is_void, ranges::std_end_t, R&>,
-                                             is_detected_dissatisfy<std::is_void, ranges::adl_end_t, R&>>)
+                            std::disjunction<is_detected<ranges::std_begin_t, R&>,
+                                             is_detected<ranges::adl_begin_t, R&>>,
+                            std::disjunction<is_detected<ranges::std_end_t, R&>,
+                                             is_detected<ranges::adl_end_t, R&>>)
   // clang-format on
 #undef IRIS_DEFINE_UNARY_CONCEPT
 #undef IRIS_DEFINE_BNARY_CONCEPT

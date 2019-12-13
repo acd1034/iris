@@ -19,14 +19,14 @@ namespace iris {
   // template <typename T, std::size_t N>
   // using iter_value_t<T(&)[N]> = std::remove_cv_t<T>;
   template <typename I>
-  using iter_reference_t = detected_t<indirection_t, I const&>;
+  using iter_reference_t = detected_t<concepts::indirection_t, I const&>;
   // 要検討
   // template <typename I>
   // using iter_rvalue_reference_t = decltype(ranges::iter_move(std::declval<I&>()));
   // template <typename I>
   // using iter_difference_t = detected_t<iterator::class_difference_t, I>;
   template <typename I>
-  using iter_pointer_t = detected_t<member_selection_t, I const&>;
+  using iter_pointer_t = detected_t<concepts::member_selection_t, I const&>;
 
 #define IRIS_DEFINE_UNARY_CONCEPT(Name, Type, ...)                             \
   template <typename Type>                                                     \
@@ -42,23 +42,23 @@ namespace iris {
   IRIS_DEFINE_UNARY_CONCEPT(is_iterator, I,
                             is_copyable<I>,
                             // *i
-                            is_detected_dissatisfy<std::is_void, indirection_t, I&>,
+                            is_detected_dissatisfy<std::is_void, concepts::indirection_t, I&>,
                             // ++i
-                            is_detected_exact<I&, prefix_increment_t, I&>)
+                            is_detected_exact<I&, concepts::prefix_increment_t, I&>)
   IRIS_DEFINE_UNARY_CONCEPT(is_input_iterator, I,
                             is_iterator<I>,
                             // i++
-                            is_detected<postfix_increment_t, I&>,
+                            is_detected<concepts::postfix_increment_t, I&>,
                             // i.operator->()
-                            is_detected_dissatisfy<std::is_void, member_selection_t, I const&>,
+                            is_detected_dissatisfy<std::is_void, concepts::member_selection_t, I const&>,
                             is_detected_satisfy<std::is_signed, iterator::class_difference_t, I>,
                             is_detected_dissatisfy<std::is_void, iterator::class_value_t, I>,
-                            is_common_reference_with<detected_t<indirection_t, I&>&&, detected_t<iterator::class_value_t, I>&>)
+                            is_common_reference_with<detected_t<concepts::indirection_t, I&>&&, detected_t<iterator::class_value_t, I>&>)
   IRIS_DEFINE_BNARY_CONCEPT(is_output_iterator, I, T,
                             is_iterator<I>,
                             // *i = t, *i++ = t
-                            std::is_assignable<detected_t<indirection_t, I&>, T const&>,
-                            std::is_assignable<detected_t<indirection_t, detected_t<postfix_increment_t, I&>>, T const&>)
+                            std::is_assignable<detected_t<concepts::indirection_t, I&>, T const&>,
+                            std::is_assignable<detected_t<concepts::indirection_t, detected_t<concepts::postfix_increment_t, I&>>, T const&>)
   IRIS_DEFINE_UNARY_CONCEPT(is_forward_iterator, I,
                             is_input_iterator<I>,
                             // == , !=
@@ -66,22 +66,22 @@ namespace iris {
   IRIS_DEFINE_UNARY_CONCEPT(is_bidirectional_iterator, I,
                             is_forward_iterator<I>,
                             // --i
-                            is_detected_exact<I&, prefix_decrement_t, I&>)
+                            is_detected_exact<I&, concepts::prefix_decrement_t, I&>)
   IRIS_DEFINE_UNARY_CONCEPT(is_random_access_iterator, I,
                             is_bidirectional_iterator<I>,
                             // <, <=, >, >
                             is_totally_ordered<I>,
                             // i += n, i + n, n + i
-                            is_detected_exact<I&, plus_assign_t, I&, detected_t<iterator::class_difference_t, I> const>,
-                            is_detected_exact<I, plus_t, I, detected_t<iterator::class_difference_t, I> const>,
-                            is_detected_exact<I, plus_t, detected_t<iterator::class_difference_t, I> const, I>,
+                            is_detected_exact<I&, concepts::plus_assign_t, I&, detected_t<iterator::class_difference_t, I> const>,
+                            is_detected_exact<I, concepts::plus_t, I, detected_t<iterator::class_difference_t, I> const>,
+                            is_detected_exact<I, concepts::plus_t, detected_t<iterator::class_difference_t, I> const, I>,
                             // i -= n, i - n
-                            is_detected_exact<I&, minus_assign_t, I&, detected_t<iterator::class_difference_t, I> const>,
-                            is_detected_exact<I, minus_t, I, detected_t<iterator::class_difference_t, I> const>,
+                            is_detected_exact<I&, concepts::minus_assign_t, I&, detected_t<iterator::class_difference_t, I> const>,
+                            is_detected_exact<I, concepts::minus_t, I, detected_t<iterator::class_difference_t, I> const>,
                             // i - j
-                            is_detected_exact<detected_t<iterator::class_difference_t, I>, minus_t, I, I>,
+                            is_detected_exact<detected_t<iterator::class_difference_t, I>, concepts::minus_t, I, I>,
                             // i[n]
-                            is_detected_exact<indirection_t<I const&>, array_subscript_t, I const&, detected_t<iterator::class_difference_t, I> const>)
+                            is_detected_exact<concepts::indirection_t<I const&>, concepts::array_subscript_t, I const&, detected_t<iterator::class_difference_t, I> const>)
   // clang-format on
 #undef IRIS_DEFINE_UNARY_CONCEPT
 #undef IRIS_DEFINE_BNARY_CONCEPT
@@ -98,8 +98,8 @@ private:                                                                       \
                                                                                \
 public:                                                                        \
   using difference_type = detected_t<iterator::class_difference_t, I>;         \
-  using pointer         = detected_t<member_selection_t, I const&>;            \
-  using reference       = detected_t<indirection_t, I const&>;                 \
+  using pointer         = detected_t<concepts::member_selection_t, I const&>;            \
+  using reference       = detected_t<concepts::indirection_t, I const&>;                 \
   using value_type      = detected_t<iterator::class_value_t, I>;              \
   static pointer to_address(iterator_type const& iter) noexcept {              \
     return iter.operator->();                                                  \
@@ -119,7 +119,7 @@ public:                                                                        \
   }                                                                            \
   template <typename X,                                                        \
             enable_if_t<                                                       \
-              std::is_assignable_v<detected_t<indirection_t, iterator_type&>,  \
+              std::is_assignable_v<detected_t<concepts::indirection_t, iterator_type&>,  \
                                    X const&>> = nullptr>                       \
   static void assign(iterator_type const& iter, X const& x) {                  \
     *iter = x;                                                                 \
@@ -127,7 +127,7 @@ public:                                                                        \
   template <typename X,                                                        \
             enable_if_t<std::conjunction_v<                                    \
               std::negation<std::is_reference<X>>,                             \
-              std::is_assignable<detected_t<indirection_t, iterator_type&>,    \
+              std::is_assignable<detected_t<concepts::indirection_t, iterator_type&>,    \
                                  X const&>>> = nullptr>                        \
   static void assign(iterator_type const& iter, X&& x) {                       \
     *iter = std::move(x);                                                      \
