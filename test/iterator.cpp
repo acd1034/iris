@@ -27,7 +27,7 @@ TEST_CASE("iterator concept", "[iterator]") {
   static_assert( iris::is_output_iterator_v<std::ostream_iterator<int>, int>);
   static_assert( iris::is_output_iterator_v<std::back_insert_iterator<std::forward_list<int>>, int>);
   static_assert( iris::is_output_iterator_v<std::forward_list<int>::iterator, int>);
-  static_assert(!iris::is_output_iterator_v<std::move_iterator<std::list<int>::iterator>, int>);
+  static_assert(!iris::is_output_iterator_v<std::move_iterator<std::forward_list<int>::iterator>, int>);
 
   static_assert(!iris::is_input_iterator_v<int*>);
   static_assert( iris::is_input_iterator_v<std::istream_iterator<int>>);

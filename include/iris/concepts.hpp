@@ -164,7 +164,7 @@ namespace iris {
   IRIS_DEFINE_BNARY_CONCEPT(is_assignable_from, T, U,
                             std::is_lvalue_reference<T>,
                             is_common_reference_with<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
-                            is_detected_exact<T, concepts::assign_t, T, U&&>)
+                            is_detected_exact<T, concepts::assign_t, T, U>)
   IRIS_DEFINE_UNARY_CONCEPT(is_swappable, T,
                             std::disjunction<is_detected<concepts::std_swap_t, T&, T&>,
                                              is_detected<concepts::adl_swap_t, T&, T&>>)

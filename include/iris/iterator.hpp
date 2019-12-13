@@ -98,8 +98,8 @@ private:                                                                       \
                                                                                \
 public:                                                                        \
   using difference_type = detected_t<iterator::class_difference_t, I>;         \
-  using pointer         = detected_t<concepts::member_selection_t, I const&>;            \
-  using reference       = detected_t<concepts::indirection_t, I const&>;                 \
+  using pointer         = detected_t<concepts::member_selection_t, I const&>;  \
+  using reference       = detected_t<concepts::indirection_t, I const&>;       \
   using value_type      = detected_t<iterator::class_value_t, I>;              \
   static pointer to_address(iterator_type const& iter) noexcept {              \
     return iter.operator->();                                                  \
@@ -118,17 +118,18 @@ public:                                                                        \
     return iterator_traits::deref(iterator_traits::advance(iter, n));          \
   }                                                                            \
   template <typename X,                                                        \
-            enable_if_t<                                                       \
-              std::is_assignable_v<detected_t<concepts::indirection_t, iterator_type&>,  \
-                                   X const&>> = nullptr>                       \
+            enable_if_t<std::is_assignable_v<                                  \
+              detected_t<concepts::indirection_t, iterator_type&>,             \
+              X const&>> = nullptr>                                            \
   static void assign(iterator_type const& iter, X const& x) {                  \
     *iter = x;                                                                 \
   }                                                                            \
-  template <typename X,                                                        \
-            enable_if_t<std::conjunction_v<                                    \
-              std::negation<std::is_reference<X>>,                             \
-              std::is_assignable<detected_t<concepts::indirection_t, iterator_type&>,    \
-                                 X const&>>> = nullptr>                        \
+  template <                                                                   \
+    typename X,                                                                \
+    enable_if_t<std::conjunction_v<                                            \
+      std::negation<std::is_reference<X>>,                                     \
+      std::is_assignable<detected_t<concepts::indirection_t, iterator_type&>,  \
+                         X const&>>> = nullptr>                                \
   static void assign(iterator_type const& iter, X&& x) {                       \
     *iter = std::move(x);                                                      \
   }
