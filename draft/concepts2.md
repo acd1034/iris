@@ -1,34 +1,35 @@
+進捗：`iris`なし以外
 https://en.cppreference.com/w/cpp/concepts
 https://cpprefjp.github.io/reference/concepts.html
 # 型の関係
 |name|at|
 |:--|:--|
-|`same_as`|``|
-|`derived_from`|``|
-|`convertible_to`|``|
+|`same_as`|`iris`|
+|`convertible_to`|`iris`|
+|`derived_from`|`iris`|
 |`common_reference_with`|``|
 |`common_with`|``|
 
 # 型の種類
 |name|at|
 |:--|:--|
-|`integral`|``|
-|`signed_integral`|``|
-|`unsigned_integral`|``|
+|`integral`|`std::is_integral`|
+|`signed_integral`|`iris`|
+|`unsigned_integral`|`iris`|
 |`boolean`|``|
-|`floating_point`|``|
+|`floating_point`|`std::is_floating_point`|
 
 # 型の構築・破棄・代入操作
 |name|at|
 |:--|:--|
-|`constructible_from`|``|
-|`default_constructible`|``|
-|`copy_constructible`|``|
-|`move_constructible`|``|
-|`destructible`|``|
-|`assignable_from`|``|
-|`swappable`|``|
-|`swappable_with`|``|
+|`destructible`|`iris`|
+|`constructible_from`|`iris`|
+|`default_constructible`|`iris`|
+|`move_constructible`|`iris`|
+|`copy_constructible`|`iris`|
+|`assignable_from`|`iris`|
+|`swappable`|`iris`|
+|`swappable_with`|`iris`|
 
 # 比較
 |name|at|
@@ -41,16 +42,16 @@ https://cpprefjp.github.io/reference/concepts.html
 # 値指向の操作
 |name|at|
 |:--|:--|
-|`movable`|``|
-|`copyable`|``|
-|`semiregular`|``|
-|`regular`|``|
+|`movable`|`iris`|
+|`copyable`|`iris`|
+|`semiregular`|`iris`|
+|`regular`|`iris`|
 
 # 関数呼び出し
 |name|at|
 |:--|:--|
-|`invocable`|``|
-|`regular_invocable`|``|
-|`predicate`|``|
-|`relation`|``|
-|`strict_weak_order`|``|
+|`invocable`|`std::is_invocable`|
+|`regular_invocable`|`regular明示用(invocableと同じ)`|
+|`predicate`|`iris`|
+|`relation`|`iris`|
+|`strict_weak_order`|`説明専用(relationと同じ)`|
