@@ -32,7 +32,7 @@ namespace iris {
     inline constexpr bool _Valid = is_detected_v<T, U...>;
 
     template <class U, template <class...> class T, class... V>
-    inline constexpr bool _Is = _Valid<T, U, V...>&& __v<T<U, V...>>;
+    inline constexpr bool _Is = _Valid<T, U, V...> && __v<T<U, V...>>;
 
     template <class U, class V>
     inline constexpr bool _ConvertibleTo = _Is<U, std::is_convertible, V>;
