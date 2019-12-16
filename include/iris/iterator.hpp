@@ -25,19 +25,7 @@ namespace iris {
   // using iter_rvalue_reference_t = decltype(ranges::iter_move(std::declval<I&>()));
   // template <typename I>
   // using iter_difference_t = detected_t<iterator::class_difference_t, I>;
-  template <typename I>
-  using iter_pointer_t = detected_t<concepts::member_selection_t, I const&>;
 
-#define IRIS_DEFINE_UNARY_CONCEPT(Name, Type, ...)                             \
-  template <typename Type>                                                     \
-  using Name = std::conjunction<__VA_ARGS__>;                                  \
-  template <typename Type>                                                     \
-  inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type>::value;
-#define IRIS_DEFINE_BNARY_CONCEPT(Name, Type1, Type2, ...)                     \
-  template <typename Type1, typename Type2>                                    \
-  using Name = std::conjunction<__VA_ARGS__>;                                  \
-  template <typename Type1, typename Type2>                                    \
-  inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2>::value;
   // clang-format off
   IRIS_DEFINE_UNARY_CONCEPT(is_iterator, I,
                             // 標準はdefault_constructibleを課す(何故?)
@@ -92,8 +80,6 @@ namespace iris {
                             // i[n]
                             is_detected_exact<concepts::indirection_t<I const&>, concepts::array_subscript_t, I const&, detected_t<iterator::class_difference_t, I> const>)
   // clang-format on
-#undef IRIS_DEFINE_UNARY_CONCEPT
-#undef IRIS_DEFINE_BNARY_CONCEPT
 
   template <typename I, typename = void>
   struct iterator_traits {

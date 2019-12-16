@@ -1,6 +1,6 @@
 #pragma once
 #include <iris/common_reference.hpp>
-#include <iris/preprocessor.hpp>
+#include <iris/def_define_concept.hpp>
 
 namespace iris {
   namespace concepts {
@@ -77,21 +77,6 @@ namespace iris {
     using adl_swap_t = decltype(swap(std::declval<T>(), std::declval<U>()));
   } // namespace concepts
 
-#define IRIS_DEFINE_UNARY_CONCEPT(Name, Type, ...)                             \
-  template <typename Type>                                                     \
-  using Name = std::conjunction<__VA_ARGS__>;                                  \
-  template <typename Type>                                                     \
-  inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type>::value;
-#define IRIS_DEFINE_BNARY_CONCEPT(Name, Type1, Type2, ...)                     \
-  template <typename Type1, typename Type2>                                    \
-  using Name = std::conjunction<__VA_ARGS__>;                                  \
-  template <typename Type1, typename Type2>                                    \
-  inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2>::value;
-#define IRIS_DEFINE_VARIA_CONCEPT(Name, Type1, Type2, ...)                     \
-  template <typename Type1, typename... Type2>                                 \
-  using Name = std::conjunction<__VA_ARGS__>;                                  \
-  template <typename Type1, typename... Type2>                                 \
-  inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2...>::value;
   // clang-format off
   // relationships
   IRIS_DEFINE_BNARY_CONCEPT(is_same_as, T, U,
@@ -231,8 +216,4 @@ namespace iris {
   template <typename R, typename T, typename U>
   inline constexpr bool is_relation_v = is_relation<R, T, U>::value;
   // clang-format on
-#undef IRIS_DEFINE_UNARY_CONCEPT
-#undef IRIS_DEFINE_BNARY_CONCEPT
-#undef IRIS_DEFINE_VARIA_CONCEPT
-
 } // namespace iris

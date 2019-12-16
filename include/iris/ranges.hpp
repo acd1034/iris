@@ -27,16 +27,7 @@ namespace iris {
   // using range_rvalue_reference_t = iter_rvalue_reference_t<iterator_t<R>>;
   // template <typename R>
   // using range_difference_t = iter_difference_t<iterator_t<R>>;
-#define IRIS_DEFINE_UNARY_CONCEPT(Name, Type, ...)                             \
-  template <typename Type>                                                     \
-  using Name = std::conjunction<__VA_ARGS__>;                                  \
-  template <typename Type>                                                     \
-  inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type>::value;
-#define IRIS_DEFINE_BNARY_CONCEPT(Name, Type1, Type2, ...)                     \
-  template <typename Type1, typename Type2>                                    \
-  using Name = std::conjunction<__VA_ARGS__>;                                  \
-  template <typename Type1, typename Type2>                                    \
-  inline constexpr bool IRIS_CONCAT(Name, _v) = Name<Type1, Type2>::value;
+
   // clang-format off
   IRIS_DEFINE_UNARY_CONCEPT(is_range, R,
                             std::disjunction<is_detected<ranges::std_begin_t, R&>,
@@ -62,6 +53,4 @@ namespace iris {
                             is_range<R>,
                             is_random_access_iterator<iterator_t<R>>)
   // clang-format on
-#undef IRIS_DEFINE_UNARY_CONCEPT
-#undef IRIS_DEFINE_BNARY_CONCEPT
 }; // namespace iris
