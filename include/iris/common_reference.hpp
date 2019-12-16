@@ -1,7 +1,6 @@
 #pragma once
 #include <type_traits>
 #include <utility>
-
 #include <iris/type_traits.hpp>
 
 namespace iris {

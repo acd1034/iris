@@ -1,6 +1,5 @@
 #pragma once
 #include <iterator>
-
 #include <iris/concepts.hpp>
 
 namespace iris {

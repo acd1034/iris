@@ -29,3 +29,6 @@ AllowShortLoopsOnASingleLine: true
 BinPackArguments: false
 BinPackParameters: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
+IncludeCategories:
+  - Regex: '^<iris/'
+    Priority: 4
