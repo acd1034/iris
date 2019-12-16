@@ -8,7 +8,7 @@ https://ja.cppreference.com/w/cpp/iterator
 |`weakly_incrementable`|``|
 |`incrementable`|``|
 |`input_or_output_iterator`|``|
-|`Sentinel`|`WIP`|
+|`sentinel_for`|`WIP`|
 |`sized_sentinel_for`|``|
 |`input_iterator`|`WIP`|
 |`output_iterator`|`WIP`|

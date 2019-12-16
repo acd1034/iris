@@ -8,7 +8,7 @@ https://cpprefjp.github.io/reference/concepts.html
 |name|at|
 |:--|:--|
 |`same_as`|`iris`|
-|`convertible_to`|`iris`|
+|`convertible_to`|`std::is_convertible`|
 |`derived_from`|`iris`|
 |`common_reference_with`|``|
 |`common_with`|``|
@@ -39,7 +39,7 @@ https://cpprefjp.github.io/reference/concepts.html
 |:--|:--|
 |`equality_comparable`|``|
 |`equality_comparable_with`|``|
-|`totally_ordered	狭義`|``|
+|`totally_ordered`|``|
 |`totally_ordered_with`|``|
 
 ## 値指向の操作
