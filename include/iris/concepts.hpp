@@ -1,6 +1,4 @@
 #pragma once
-#include <functional> // std::invoke
-
 #include <iris/common_reference.hpp>
 #include <iris/preprocessor.hpp>
 
@@ -67,8 +65,6 @@ namespace iris {
       decltype(std::declval<T>()(std::declval<Args>()...));
     template <typename T, typename U>
     using comma_t = decltype(std::declval<T>(), std::declval<U>());
-    template <typename T, typename U>
-    using static_cast_t = decltype(static_cast<U>(std::declval<T>()));
 
     template <typename T, typename U>
     using common_type_t = detected_t<std::common_type_t, T, U>;
@@ -101,20 +97,17 @@ namespace iris {
   IRIS_DEFINE_BNARY_CONCEPT(is_same_as, T, U,
                             std::is_same<T, U>,
                             std::is_same<U, T>)
-  IRIS_DEFINE_BNARY_CONCEPT(is_convertible_to, T, U,
-                            std::is_convertible<T, U>// ,
-                            /* requires(T (&fn)()) { static_cast<U>(fn()); } */)
   IRIS_DEFINE_BNARY_CONCEPT(is_derived_from, T, U,
                             std::is_base_of<U, T>,
-                            is_convertible_to<std::remove_cv_t<T>*, std::remove_cv_t<U>*>)
+                            std::is_convertible<std::remove_cv_t<T>*, std::remove_cv_t<U>*>)
   IRIS_DEFINE_BNARY_CONCEPT(is_common_reference_with, T, U,
                             is_same_as<concepts::common_reference_t<T, U>, concepts::common_reference_t<U, T>>,
-                            is_convertible_to<T, concepts::common_reference_t<T, U>>,
-                            is_convertible_to<U, concepts::common_reference_t<T, U>>)
+                            std::is_convertible<T, concepts::common_reference_t<T, U>>,
+                            std::is_convertible<U, concepts::common_reference_t<T, U>>)
   IRIS_DEFINE_BNARY_CONCEPT(is_common_with, T, U,
                             is_same_as<concepts::common_type_t<T, U>, concepts::common_type_t<U, T>>,
-                            is_convertible_to<T, concepts::common_type_t<T, U>>,
-                            is_convertible_to<U, concepts::common_type_t<T, U>>,
+                            std::is_convertible<T, concepts::common_type_t<T, U>>,
+                            std::is_convertible<U, concepts::common_type_t<T, U>>,
                             is_common_reference_with<std::add_lvalue_reference_t<T const>, std::add_lvalue_reference_t<U const>>,
                             is_common_reference_with<
                               std::add_lvalue_reference_t<concepts::common_type_t<T, U>>,
@@ -127,7 +120,7 @@ namespace iris {
                             std::is_integral<T>,
                             std::negation<std::is_signed<T>>)
   IRIS_DEFINE_UNARY_CONCEPT(is_boolean, T,
-                            is_convertible_to<T, bool>,
+                            std::is_convertible<T, bool>,
                             is_detected_convertible<bool, concepts::logical_not_t, T>,
                             is_detected<concepts::logical_and_t, std::remove_reference_t<T> const&, bool>,
                             is_detected<concepts::logical_and_t, bool, std::remove_reference_t<T> const&>,
@@ -152,15 +145,15 @@ namespace iris {
                             std::is_default_constructible<T>)
   IRIS_DEFINE_UNARY_CONCEPT(is_move_constructible, T,
                             std::is_move_constructible<T>,
-                            is_convertible_to<T, T>)
+                            std::is_convertible<T, T>)
   IRIS_DEFINE_UNARY_CONCEPT(is_copy_constructible, T,
                             is_move_constructible<T>,
                             is_constructible_from<T, T&>,
-                            is_convertible_to<T&, T>,
+                            std::is_convertible<T&, T>,
                             is_constructible_from<T, T const&>,
-                            is_convertible_to<T const&, T>,
+                            std::is_convertible<T const&, T>,
                             is_constructible_from<T, T const>,
-                            is_convertible_to<T const, T>)
+                            std::is_convertible<T const, T>)
   IRIS_DEFINE_BNARY_CONCEPT(is_assignable_from, T, U,
                             std::is_lvalue_reference<T>,
                             is_common_reference_with<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
