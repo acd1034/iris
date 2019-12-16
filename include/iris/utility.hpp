@@ -4,6 +4,7 @@
 
 namespace iris {
   // tuple-like
+  // TODO: deal with both member_get_t and std_get_t
   namespace utility {
     template <std::size_t I, typename T>
     using member_get_t = decltype(std::declval<T>().template get<I>());
@@ -16,9 +17,10 @@ namespace iris {
     struct has_get_impl<T, std::index_sequence<Indices...>>
       : std::bool_constant<(
           true && ...
-          && (is_detected_v<member_get_t,
-                            Indices,
-                            T> || is_detected_v<std_get_t, Indices, T>))> {};
+          && (is_detected_v<
+               member_get_t,
+               Indices,
+               T> /* || is_detected_v<std_get_t, Indices, T> */))> {};
     template <typename T>
     using has_get =
       has_get_impl<T,

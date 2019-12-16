@@ -4,6 +4,7 @@
 
 namespace iris {
   // equal
+  // TODO: conceptを用いた実装
   // clang-format off
   template <typename R1, typename R2>
   bool equal(R1 const& lhs, R2 const& rhs) {
