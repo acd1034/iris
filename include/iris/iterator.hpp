@@ -35,7 +35,7 @@ namespace iris {
                             is_detected_exact<I&, concepts::prefix_increment_t, I&>,
                             is_detected<concepts::postfix_increment_t, I&>)
   IRIS_DEFINE_BNARY_CONCEPT(is_sentinel_for, S, I,
-                            is_iterator<I>,
+                            // is_iterator<I>,
                             // ==, !=
                             is_weakly_equality_comparable_with<S, I>)
   IRIS_DEFINE_UNARY_CONCEPT(is_input_iterator, I,

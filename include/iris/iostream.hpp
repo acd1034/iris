@@ -35,8 +35,11 @@ namespace iris {
     auto& tuple_print(std::basic_ostream<CharT, Traits>& os,
                       const T& t,
                       std::index_sequence<Indicies...>) {
-      using swallow = std::initializer_list<int>;
-      (void)swallow{(void(std::cout << std::get<Indicies>(t) << " "), 0)...};
+      const char* dlm = "";
+      using swallow   = std::initializer_list<int>;
+      (void)swallow{
+        (void(std::cout << std::exchange(dlm, " ") << std::get<Indicies>(t)),
+         0)...};
       return os;
     }
   } // namespace iostream

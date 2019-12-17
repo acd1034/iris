@@ -4,7 +4,7 @@
 
 int main() {
   using std::cout;
-  using namespace std::string_literals;
+  using namespace std::literals::string_literals;
   cout << std::boolalpha;
   iris::is_tuple_like_v<int> | cout;
   iris::is_tuple_like_v<int const> | cout;
@@ -25,11 +25,11 @@ int main() {
   // std::is_same_v<std::tuple_element_t<0, T>, int> | cout; // compile error!
   iris::is_range_v<std::string> | cout;
   iris::is_range_v<std::array<int, 1>> | cout;
-  std::pair{1, "2s"s} | cout;
-  std::tuple{
+  cout << std::pair{1, "2s"s} << "v ";
+  cout<<std::tuple{
     1,
     'a',
     "hello"s,
-  } | cout;
-  std::array{1, 2, 3} | cout;
+  } <<"v ";
+  cout << std::array{1, 2, 3} << "v ";
 }
