@@ -127,7 +127,7 @@ namespace iris {
   private:
     I2 last;
     std::size_t current = 0;
-    std::make_signed_t<std::size_t> count;
+    std::make_signed_t<decltype(current)> count;
 
   public:
     // counted_iterator()                        = delete;
