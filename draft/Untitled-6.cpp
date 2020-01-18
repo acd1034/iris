@@ -10,4 +10,5 @@ int main() {
   list l{0, 1, 2};
   iota(0, [](auto i) { return 2 * i + 1; }) | counted(12) | cout;
   l | counted(5) | cout;
+  iota(0) | counted(5) | cout;
 }

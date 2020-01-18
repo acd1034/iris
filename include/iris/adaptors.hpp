@@ -1,6 +1,7 @@
 #pragma once
-#include <any>
+#include <iris/functional.hpp>
 #include <iris/ranges.hpp>
+#include <iris/semiregular_box.hpp>
 
 namespace iris {
   // folded
@@ -91,19 +92,19 @@ namespace iris {
       nullptr>
   struct iota_iterator {
     T t;
-    std::any fn;
+    semiregular_box<Fn> fn;
 
     // iota_iterator()                     = delete;
     // iota_iterator(iota_iterator&&)      = default;
     // iota_iterator(const iota_iterator&) = default;
     // iota_iterator& operator=(iota_iterator&&) = default;
     // iota_iterator& operator=(const iota_iterator&) = default;
-    iota_iterator(T t, Fn fn) : t(t), fn(fn) {}
+    iota_iterator(T&& t, Fn&& fn) : t(std::forward<T>(t)), fn(std::forward<Fn>(fn)) {}
 
     using reference = T;
     reference operator*() const { return t; }
     iota_iterator& operator++() {
-      t = std::any_cast<Fn>(fn).operator()(std::move(t));
+      t = (*fn)(std::move(t));
       return *this;
     }
     iota_iterator operator++(int) {
@@ -112,6 +113,11 @@ namespace iris {
       return old;
     }
   };
+  template <typename T>
+  auto iota(T&& t) {
+    return range{iota_iterator{std::forward<T>(t), identity{}},
+                 unreachable_sentinel};
+  }
   template <typename T, typename Fn>
   auto iota(T&& t, Fn&& fn) {
     return range{iota_iterator{std::forward<T>(t), std::forward<Fn>(fn)},
