@@ -4,7 +4,7 @@
 #include <iris/type_traits.hpp>
 
 namespace iris {
-  namespace common_reference {
+  namespace detail {
     // See https://ericniebler.github.io/std/wg21/D0022.html
     // clang-format off
     template <class T>
@@ -180,6 +180,6 @@ namespace iris {
     struct common_reference<std::enable_if_t<_Valid<common_reference_t, T, U>>, T, U, V, W...>
       : common_reference<void, common_reference_t<T, U>, V, W...> {};
     // clang-format on
-  } // namespace common_reference
-  using common_reference::common_reference_t;
+  } // namespace detail
+  using detail::common_reference_t;
 } // namespace iris
