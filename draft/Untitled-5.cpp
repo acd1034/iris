@@ -33,5 +33,5 @@ int main() {
   is_copy_constructible_v<I> | cout;
   is_assignable_from_v<I&, I const&> | cout;
   range r{iota_iterator{1, [](auto i) { return ++i; }}, unreachable_sentinel};
-  range s{counted_iterator{begin(l), 0}, counted_iterator{begin(l), 2}};
+  range s{counted_iterator{begin(l), end(l), 2}, default_sentinel};
 }
