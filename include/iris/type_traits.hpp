@@ -119,7 +119,4 @@ namespace iris {
 
   template <bool B, typename T = std::nullptr_t>
   using enable_if_t = typename std::enable_if<B, T>::type;
-
-  template <typename...>
-  inline constexpr bool false_v = false;
 } // namespace iris

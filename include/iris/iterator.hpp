@@ -82,21 +82,21 @@ namespace iris {
 
   template <typename I, typename = void>
   struct iterator_traits {
-    static_assert(false_v<I>, "candidate template ignored");
+    static_assert([]() { return false; }(), "candidate template ignored");
   };
 
 // the number behind indicates where the macro is used
-#define IRIS_DEFINE_ITERATOR_TRAITS_TYPE_ALIASES_1234                          \
-private:                                                                       \
-  using iterator_type = I;                                                     \
-                                                                               \
-public:                                                                        \
-  using difference_type = detected_t<iterator::class_difference_t, I>;         \
-  using pointer         = detected_t<concepts::member_selection_t, I const&>;  \
-  using reference       = detected_t<concepts::indirection_t, I const&>;       \
-  using value_type      = detected_t<iterator::class_value_t, I>;              \
-  static pointer to_address(iterator_type const& iter) noexcept {              \
-    return iter.operator->();                                                  \
+#define IRIS_DEFINE_ITERATOR_TRAITS_TYPE_ALIASES_1234                         \
+private:                                                                      \
+  using iterator_type = I;                                                    \
+                                                                              \
+public:                                                                       \
+  using difference_type = detected_t<iterator::class_difference_t, I>;        \
+  using pointer         = detected_t<concepts::member_selection_t, I const&>; \
+  using reference       = detected_t<concepts::indirection_t, I const&>;      \
+  using value_type      = detected_t<iterator::class_value_t, I>;             \
+  static pointer to_address(iterator_type const& iter) noexcept {             \
+    return iter.operator->();                                                 \
   }
 #define IRIS_DEFINE_ITERATOR_TRAITS_COMMON_12345                               \
   static reference deref(iterator_type const& iter) noexcept { return *iter; } \
@@ -127,20 +127,20 @@ public:                                                                        \
   static void assign(iterator_type const& iter, X&& x) {                       \
     *iter = std::move(x);                                                      \
   }
-#define IRIS_DEFINE_ITERATOR_TRAITS_EQUAL_TO_ETC_2345                          \
-  static bool equal_to(iterator_type const& lhs, iterator_type const& rhs) {   \
-    return lhs == rhs;                                                         \
-  }                                                                            \
-  static bool not_equal_to(iterator_type const& lhs,                           \
-                           iterator_type const& rhs) {                         \
-    return !iterator_traits::equal_to(lhs, rhs);                               \
+#define IRIS_DEFINE_ITERATOR_TRAITS_EQUAL_TO_ETC_2345                        \
+  static bool equal_to(iterator_type const& lhs, iterator_type const& rhs) { \
+    return lhs == rhs;                                                       \
+  }                                                                          \
+  static bool not_equal_to(iterator_type const& lhs,                         \
+                           iterator_type const& rhs) {                       \
+    return !iterator_traits::equal_to(lhs, rhs);                             \
   }
-#define IRIS_DEFINE_ITERATOR_TRAITS_RETREAT_PREV_345                           \
-  static iterator_type& retreat(iterator_type& iter, difference_type n = 1) {  \
-    return iterator_traits::advance(iter, -n);                                 \
-  }                                                                            \
-  static auto prev(iterator_type const& iter, difference_type n = 1) {         \
-    return iterator_traits::next(iter, -n);                                    \
+#define IRIS_DEFINE_ITERATOR_TRAITS_RETREAT_PREV_345                          \
+  static iterator_type& retreat(iterator_type& iter, difference_type n = 1) { \
+    return iterator_traits::advance(iter, -n);                                \
+  }                                                                           \
+  static auto prev(iterator_type const& iter, difference_type n = 1) {        \
+    return iterator_traits::next(iter, -n);                                   \
   }
 #define IRIS_DEFINE_ITERATOR_TRAITS_LESS_ETC_45                                \
   static bool less(iterator_type const& lhs, iterator_type const& rhs) {       \
