@@ -2,7 +2,15 @@
 #include <type_traits>
 
 namespace iris {
-  // See https://en.cppreference.com/w/cpp/experimental/is_detected
+  // https://en.cppreference.com/w/cpp/types/type_identity
+  template <class T>
+  struct type_identity {
+    using type = T;
+  };
+  template <class T>
+  using type_identity_t = typename type_identity<T>::type;
+
+  // https://en.cppreference.com/w/cpp/experimental/is_detected
   namespace type_traits {
     struct nonesuch {
       nonesuch()                = delete;
@@ -15,17 +23,15 @@ namespace iris {
               typename AlwaysVoid,
               template <typename...> typename Op,
               typename... Args>
-    struct detected_or_impl {
-      using value_t = std::false_type;
-      using type    = Default;
+    struct detected_or_impl : type_identity<Default> {
+      using value_type = std::false_type;
     };
 
     template <typename Default,
               template <typename...> typename Op,
               typename... Args>
-    struct detected_or_impl<Default, std::void_t<Op<Args...>>, Op, Args...> {
-      using value_t = std::true_type;
-      using type    = Op<Args...>;
+    struct detected_or_impl<Default, std::void_t<Op<Args...>>, Op, Args...> : type_identity<Op<Args...>> {
+      using value_type = std::true_type;
     };
   } // namespace type_traits
 
@@ -33,7 +39,7 @@ namespace iris {
             template <typename...> typename Op,
             typename... Args>
   using is_detected_or =
-    typename type_traits::detected_or_impl<Default, void, Op, Args...>::value_t;
+    typename type_traits::detected_or_impl<Default, void, Op, Args...>::value_type;
 
   template <typename Default,
             template <typename...> typename Op,
@@ -102,9 +108,7 @@ namespace iris {
     is_detected_dissatisfy<Concept, Op, Args...>::value;
 
   template <typename T>
-  struct remove_cvref {
-    using type = std::remove_cv_t<std::remove_reference_t<T>>;
-  };
+  struct remove_cvref : type_identity<std::remove_cv_t<std::remove_reference_t<T>>> {};
 
   template <typename T>
   using remove_cvref_t = typename remove_cvref<T>::type;

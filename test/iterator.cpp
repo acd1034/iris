@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include <bits/stdc++.h>
 #include <catch.hpp>
+#include <iris/algorithm.hpp>
 #include <iris/iterator.hpp>
 #include <iris/ranges.hpp>
 #include <iris/utility.hpp>
