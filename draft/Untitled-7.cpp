@@ -1,9 +1,10 @@
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 #include <iris/iostream.hpp>
 #include <iris/semiregular_box.hpp>
 
 template <class T>
-[[deprecated]] void type(T&&) {} int main() {
+[[deprecated]] void type(T&&) {}
+int main() {
   using std::cout;
   using namespace iris;
   {

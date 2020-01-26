@@ -5,6 +5,7 @@
 namespace iris {
   // tuple-like
   // TODO: deal with both member_get_t and std_get_t
+  // 20200118: See https://github.com/LoliGothick/mitama-mana/blob/master/include/mitama/mana/type_traits/is_tuple_like.hpp
   namespace utility {
     template <std::size_t I, typename T>
     using member_get_t = decltype(std::declval<T>().template get<I>());
