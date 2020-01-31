@@ -1,12 +1,12 @@
 #pragma once
-#include <iris/common_reference.hpp>
 #include <iris/def_define_concept.hpp>
+#include <iris/type_traits/common_reference.hpp>
 
 namespace iris {
   namespace concepts {
     // See https://en.cppreference.com/w/cpp/concepts
-#define IRIS_DEFINE_UNARY_OPERATOR_TYPE(Name, Op)                              \
-  template <typename T>                                                        \
+#define IRIS_DEFINE_UNARY_OPERATOR_TYPE(Name, Op) \
+  template <typename T>                           \
   using Name = decltype(Op std::declval<T>());
     IRIS_DEFINE_UNARY_OPERATOR_TYPE(prefix_increment_t, ++)
     IRIS_DEFINE_UNARY_OPERATOR_TYPE(prefix_decrement_t, --)
@@ -18,8 +18,8 @@ namespace iris {
     IRIS_DEFINE_UNARY_OPERATOR_TYPE(indirection_t, *)
 #undef IRIS_DEFINE_UNARY_OPERATOR_TYPE
 
-#define IRIS_DEFINE_BNARY_OPERATOR_TYPE(Name, Op)                              \
-  template <typename T, typename U>                                            \
+#define IRIS_DEFINE_BNARY_OPERATOR_TYPE(Name, Op) \
+  template <typename T, typename U>               \
   using Name = decltype(std::declval<T>() Op std::declval<U>());
     IRIS_DEFINE_BNARY_OPERATOR_TYPE(equal_to_t, ==)
     IRIS_DEFINE_BNARY_OPERATOR_TYPE(not_equal_to_t, !=)
