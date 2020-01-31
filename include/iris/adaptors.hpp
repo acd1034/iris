@@ -1,5 +1,4 @@
 #pragma once
-#include <iris/functional.hpp>
 #include <iris/ranges.hpp>
 #include <iris/semiregular_box.hpp>
 
