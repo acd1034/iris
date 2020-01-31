@@ -63,7 +63,7 @@ namespace iris {
       }
     } // namespace pipe
 
-    inline namespace delegate {
+    namespace delegate {
       using ranges::operator<<, tuple::operator<<, pipe::operator|;
     } // namespace delegate
   }   // namespace io

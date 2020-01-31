@@ -71,6 +71,16 @@ namespace iris {
              std::initializer_list<std::initializer_list<U>> rhs) {
     return ::iris::equal(begin(lhs), end(lhs), begin(rhs), end(rhs));
   }
+  // TODO: overload ↓
+  template <class T, std::size_t M, class U, std::size_t N>
+  constexpr bool equal(const T (&)[M], const U (&)[N]) {
+    return false;
+  }
+  template <class T, std::size_t M, class U>
+  bool equal(const T (&lhs)[M], const U (&rhs)[M]) {
+    return ::iris::equal(std::begin(lhs), std::end(lhs), std::begin(rhs), std::end(rhs));
+  }
+
   template <class It1, class It2, class It3, class It4>
   bool equal(It1 first1, It2 last1, It3 first2, It4 last2) {
     for (; first1 != last1 && first2 != last2; ++first1, ++first2)
