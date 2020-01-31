@@ -4,8 +4,8 @@
 #include <iris/utility.hpp>
 
 namespace iris {
-  namespace io {
-    namespace ranges {
+  inline namespace io {
+    inline namespace ranges {
       // range operator<<
       template <
         class CharT,
@@ -31,7 +31,7 @@ namespace iris {
       }
     } // namespace ranges
 
-    namespace tuple {
+    inline namespace tuple {
       // tuple-like operator<<
       namespace detail {
         template <class CharT, class Traits, class T, std::size_t... Indicies>
@@ -41,7 +41,7 @@ namespace iris {
           const char* dlm = "";
           using swallow   = std::initializer_list<int>;
           (void)swallow{
-            (void(std::cout << std::exchange(dlm, " ") << std::get<Indicies>(t)), 0)...};
+            (void(os << std::exchange(dlm, " ") << std::get<Indicies>(t)), 0)...};
           return os;
         }
       } // namespace detail
@@ -56,14 +56,14 @@ namespace iris {
       }
     } // namespace tuple
 
-    namespace pipe {
+    inline namespace pipe {
       template <class T, class CharT, class Traits>
       void operator|(const T& t, std::basic_ostream<CharT, Traits>& os) {
         os << t << std::endl;
       }
     } // namespace pipe
 
-    namespace delegate {
+    inline namespace delegate {
       using ranges::operator<<, tuple::operator<<, pipe::operator|;
     } // namespace delegate
   }   // namespace io
