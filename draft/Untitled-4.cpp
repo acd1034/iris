@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
-#include <iris/iostream.hpp>
-#include <iris/utility.hpp>
+#include <iris/experimental/delegate.hpp>
 
 int main() {
   using std::cout;
@@ -26,10 +25,10 @@ int main() {
   iris::is_range_v<std::string> | cout;
   iris::is_range_v<std::array<int, 1>> | cout;
   cout << std::pair{1, "2s"s} << "v ";
-  cout<<std::tuple{
+  cout << std::tuple{
     1,
     'a',
     "hello"s,
-  } <<"v ";
+  } << "v ";
   cout << std::array{1, 2, 3} << "v ";
 }

@@ -49,7 +49,7 @@ namespace iris {
         class CharT,
         class Traits,
         class T,
-        enable_if_t<is_tuple_like_v<T>> = nullptr>
+        enable_if_t<is_tuple_like_v<T> && !is_range_v<T>> = nullptr>
       auto& operator<<(std::basic_ostream<CharT, Traits>& os, const T& t) {
         return detail::tuple_print(
           os, t, std::make_index_sequence<std::tuple_size_v<T>>{});

@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
-#include <iris/adaptors.hpp>
-#include <iris/algorithm.hpp>
-#include <iris/iostream.hpp>
+#include <iris/experimental/delegate.hpp>
 int main() {
   using std::cout, std::begin, std::list;
   using namespace std::literals::string_literals;
