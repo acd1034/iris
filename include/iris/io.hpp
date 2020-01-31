@@ -62,5 +62,9 @@ namespace iris {
         os << t << std::endl;
       }
     } // namespace pipe
+
+    namespace delegate {
+      using ranges::operator<<, tuple::operator<<, pipe::operator|;
+    } // namespace delegate
   }   // namespace io
 } // namespace iris
