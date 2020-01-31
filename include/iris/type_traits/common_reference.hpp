@@ -1,12 +1,13 @@
 #pragma once
 #include <type_traits>
 #include <utility>
-#include <iris/type_traits.hpp>
+#include <iris/type_traits/is_detected.hpp> // is_detected_v
 
 namespace iris {
-  namespace _common_reference {
-    // See https://ericniebler.github.io/std/wg21/D0022.html
-    // clang-format off
+  namespace type_traits {
+    namespace _common_reference {
+      // See https://ericniebler.github.io/std/wg21/D0022.html
+      // clang-format off
     template <class T>
     using __t = typename T::type;
 
@@ -179,7 +180,9 @@ namespace iris {
     template <class T, class U, class V, class... W>
     struct common_reference<std::enable_if_t<_Valid<common_reference_t, T, U>>, T, U, V, W...>
       : common_reference<void, common_reference_t<T, U>, V, W...> {};
-    // clang-format on
-  } // namespace _common_reference
-  using _common_reference::common_reference_t;
+      // clang-format on
+    } // namespace _common_reference
+  }   // namespace type_traits
+  using type_traits::_common_reference::common_reference;
+  using type_traits::_common_reference::common_reference_t;
 } // namespace iris
