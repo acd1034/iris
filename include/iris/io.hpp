@@ -1,7 +1,7 @@
 #pragma once
-#include <iostream> // std::basic_ostream
-#include <iris/ranges.hpp>
-#include <iris/utility.hpp>
+#include <iostream>                       // std::basic_ostream
+#include <iris/ranges.hpp>                // is_range
+#include <iris/utility/is_tuple_like.hpp> // is_tuple_like
 
 namespace iris {
   inline namespace io {
@@ -33,26 +33,26 @@ namespace iris {
 
     inline namespace tuple {
       // tuple-like operator<<
-      namespace detail {
-        template <class CharT, class Traits, class T, std::size_t... Indicies>
-        auto& tuple_print(std::basic_ostream<CharT, Traits>& os,
-                          const T& t,
-                          std::index_sequence<Indicies...>) {
-          const char* dlm = "";
-          using swallow   = std::initializer_list<int>;
-          (void)swallow{
-            (void(os << std::exchange(dlm, " ") << std::get<Indicies>(t)), 0)...};
-          return os;
-        }
-      } // namespace detail
+      // namespace detail {
+      template <class CharT, class Traits, class T, std::size_t... Indicies>
+      auto& tuple_print(std::basic_ostream<CharT, Traits>& os,
+                        const T& t,
+                        std::index_sequence<Indicies...>) {
+        const char* dlm = "";
+        using swallow   = std::initializer_list<int>;
+        (void)swallow{
+          (void(os << std::exchange(dlm, " ") << std::get<Indicies>(t)), 0)...};
+        return os;
+      }
+      // } // namespace detail
       template <
         class CharT,
         class Traits,
         class T,
         enable_if_t<is_tuple_like_v<T> && !is_range_v<T>> = nullptr>
       auto& operator<<(std::basic_ostream<CharT, Traits>& os, const T& t) {
-        return detail::tuple_print(
-          os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
+        // return detail::tuple_print(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
+        return tuple_print(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
       }
     } // namespace tuple
 

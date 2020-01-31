@@ -1,6 +1,6 @@
 #pragma once
 #include <iris/ranges.hpp>
-#include <iris/semiregular_box.hpp>
+#include <iris/utility/semiregular_box.hpp>
 
 namespace iris {
   // folded

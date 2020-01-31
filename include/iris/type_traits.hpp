@@ -1,5 +1,4 @@
 #pragma once
-#include <type_traits>
 #include <iris/type_traits/common_reference.hpp>
 #include <iris/type_traits/is_detected.hpp>
 
