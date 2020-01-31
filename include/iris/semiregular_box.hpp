@@ -39,12 +39,12 @@ namespace iris {
               enable_if_t<std::is_default_constructible_v<U>> = nullptr>
     constexpr semiregular_box() noexcept(std::is_nothrow_constructible_v<T>)
       : Base{std::in_place} {
-      std::cout << "dconst" << std::endl;
+      // std::cout << "dconst" << std::endl;
     }
     template <class U                                          = T,
               enable_if_t<!std::is_default_constructible_v<U>> = nullptr>
     constexpr semiregular_box() noexcept : Base{} {
-      std::cout << "ndconst" << std::endl;
+      // std::cout << "ndconst" << std::endl;
     }
 
     semiregular_box(semiregular_box&&)      = default;
@@ -53,13 +53,13 @@ namespace iris {
     constexpr semiregular_box(semiregular_box<U>&& rhs) noexcept(
       std::is_nothrow_move_constructible_v<T>)
       : Base{std::move(rhs).base()} {
-      std::cout << "mconst_from_box" << std::endl;
+      // std::cout << "mconst_from_box" << std::endl;
     }
     template <class U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
     constexpr semiregular_box(const semiregular_box<U>& rhs) noexcept(
       std::is_nothrow_copy_constructible_v<T>)
       : Base{rhs.base()} {
-      std::cout << "cconst_from_box" << std::endl;
+      // std::cout << "cconst_from_box" << std::endl;
     }
     template <class U,
               enable_if_t<
@@ -67,13 +67,13 @@ namespace iris {
     constexpr explicit semiregular_box(U&& rhs) noexcept(
       std::is_nothrow_move_constructible_v<T>)
       : Base{std::in_place, std::move(rhs)} {
-      std::cout << "mconst_from_U" << std::endl;
+      // std::cout << "mconst_from_U" << std::endl;
     }
     template <class U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
     constexpr explicit semiregular_box(const U& rhs) noexcept(
       std::is_nothrow_copy_constructible_v<T>)
       : Base{std::in_place, rhs} {
-      std::cout << "cconst_from_U" << std::endl;
+      // std::cout << "cconst_from_U" << std::endl;
     }
 
     template <class... Args,
@@ -101,14 +101,14 @@ namespace iris {
           && (std::is_nothrow_copy_assignable_v<T> || std::is_nothrow_copy_constructible_v<T>))) {
       if constexpr ((std::is_rvalue_reference_v<U&&> && std::is_move_assignable_v<T>)
                     || (std::is_lvalue_reference_v<U&&> && std::is_copy_assignable_v<T>)) {
-        std::cout << "assign_from_box1" << std::endl;
-        base() = std::forward<U>(rhs).base();
+        // std::cout << "assign_from_box1" << std::endl;
+        Base::operator=(std::forward<U>(rhs).base());
       } else {
-        std::cout << "assign_from_box2" << std::endl;
+        // std::cout << "assign_from_box2" << std::endl;
         if (rhs)
-          emplace(*std::forward<U>(rhs));
+          Base::emplace(*std::forward<U>(rhs));
         else
-          reset();
+          Base::reset();
       }
       return *this;
     }
@@ -141,19 +141,14 @@ namespace iris {
           (std::is_nothrow_copy_assignable_v<T> || std::is_nothrow_copy_constructible_v<T>))) {
       if constexpr ((std::is_rvalue_reference_v<U&&> && std::is_move_assignable_v<T>)
                     || (std::is_lvalue_reference_v<U> && std::is_copy_assignable_v<T>)) {
-        std::cout << "assign_from_U1" << std::endl;
-        base() = std::forward<U>(rhs);
+        // std::cout << "assign_from_U1" << std::endl;
+        Base::operator=(std::forward<U>(rhs));
       } else {
-        std::cout << "assign_from_U2" << std::endl;
-        emplace(std::forward<U>(rhs));
+        // std::cout << "assign_from_U2" << std::endl;
+        Base::emplace(std::forward<U>(rhs));
       }
       return *this;
     }
-
-    using Base::emplace, Base::swap, Base::reset, Base::operator*,
-      Base::operator->, Base::operator bool, Base::has_value, Base::value,
-      Base::value_or;
-    using value_type = typename Base::value_type;
   };
   template <class T>
   semiregular_box(T)->semiregular_box<T>;
