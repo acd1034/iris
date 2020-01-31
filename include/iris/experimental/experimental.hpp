@@ -1,7 +1,12 @@
-#include <iris/iostream.hpp>
+#pragma once
 namespace iris {
-  template <typename T, enable_if_t<std::is_floating_point_v<T>> = nullptr>
-  inline constexpr T pi_v = static_cast<T>(3.141592653589793238462643383279502884L);
+  struct identity {
+    template <class T>
+    constexpr T&& operator()(T&& t) const noexcept(
+      noexcept(std::forward<T>(t))) {
+      return std::forward<T>(t);
+    }
+  };
 
   // https://en.cppreference.com/w/cpp/utility/variant/visit
   template <class... Ts>
@@ -28,7 +33,3 @@ namespace iris {
   template <class T>
   [[deprecated]] void type(T&&) {}
 } // namespace iris
-int main() {
-  using std::cout;
-  std::cout << iris::pi_v<double> << std::endl;
-}

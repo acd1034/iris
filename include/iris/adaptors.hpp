@@ -113,11 +113,11 @@ namespace iris {
       return old;
     }
   };
-  template <typename T>
-  auto iota(T&& t) {
-    return range{iota_iterator{std::forward<T>(t), identity{}},
-                 unreachable_sentinel};
-  }
+  // template <typename T>
+  // auto iota(T&& t) {
+  //   return range{iota_iterator{std::forward<T>(t), identity{}},
+  //                unreachable_sentinel};
+  // }
   template <typename T, typename Fn>
   auto iota(T&& t, Fn&& fn) {
     return range{iota_iterator{std::forward<T>(t), std::forward<Fn>(fn)},
