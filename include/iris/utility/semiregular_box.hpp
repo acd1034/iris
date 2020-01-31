@@ -1,9 +1,8 @@
 #pragma once
-#include <iostream>
+// #include <iostream>
 #include <optional>
 #include <iris/concepts.hpp>
 
-// See:
 // https://github.com/CaseyCarter/cmcstl2/blob/master/include/stl2/detail/semiregular_box.hpp
 // https://en.cppreference.com/w/cpp/ranges/semiregular_wrapper
 namespace iris {
@@ -12,14 +11,14 @@ namespace iris {
               std::is_move_constructible_v<T> && std::is_copy_constructible_v<T>>>
   struct semiregular_box;
 
-  namespace detail {
+  namespace utility {
     template <class>
     struct is_semiregular_box : std::false_type {};
     template <class T>
     struct is_semiregular_box<semiregular_box<T>> : std::true_type {};
     template <class T>
     inline constexpr bool is_semiregular_box_v = is_semiregular_box<T>::value;
-  } // namespace detail
+  } // namespace utility
 
   template <class T, class>
   struct semiregular_box : std::optional<T> {
@@ -93,7 +92,7 @@ namespace iris {
 
   private:
     template <class U, enable_if_t<
-                         detail::is_semiregular_box_v<remove_cvref_t<U>>> = nullptr>
+                         utility::is_semiregular_box_v<remove_cvref_t<U>>> = nullptr>
     constexpr semiregular_box& assign_semiregular_box(U&& rhs) noexcept(
       (std::is_rvalue_reference_v<U&&> //
        && (std::is_nothrow_move_assignable_v<T> || std::is_nothrow_move_constructible_v<T>))
