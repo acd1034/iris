@@ -4,22 +4,40 @@
 
 namespace iris {
   // tuple-like
-  // TODO: deal with both member_get_t and std_get_t
-  // 20200118: See https://github.com/LoliGothick/mitama-mana/blob/master/include/mitama/mana/type_traits/is_tuple_like.hpp
   namespace utility {
+    namespace _get {
+      template <std::size_t I, typename T, enable_if_t<std::is_lvalue_reference_v<T&>> = nullptr>
+      constexpr auto get(T& t) -> decltype(t.template get<I>()) {
+        return t.template get<I>();
+      }
+      template <std::size_t I, typename T, enable_if_t<std::is_lvalue_reference_v<T&>> = nullptr>
+      constexpr auto get(const T& t) -> decltype(t.template get<I>()) {
+        return t.template get<I>();
+      }
+      template <std::size_t I, typename T, enable_if_t<std::is_rvalue_reference_v<T&&>> = nullptr>
+      constexpr auto get(T&& t) -> decltype(t.template get<I>()) {
+        return t.template get<I>();
+      }
+      template <std::size_t I, typename T, enable_if_t<std::is_rvalue_reference_v<T&&>> = nullptr>
+      constexpr auto get(const T&& t) -> decltype(t.template get<I>()) {
+        return t.template get<I>();
+      }
+    } // namespace _get
+
     template <std::size_t I, typename T>
-    using member_get_t = decltype(std::declval<T>().template get<I>());
+    constexpr decltype(auto) get(T&& t) {
+      using ::iris::utility::_get::get;
+      return get<I>(std::forward<T>(t));
+    }
+
     template <std::size_t I, typename T>
-    using std_get_t = decltype(std::get<I>(std::declval<T>()));
+    using iris_get_t = decltype(get<I>(std::declval<T>()));
 
     template <typename, typename>
     struct has_get_impl : std::false_type {};
     template <typename T, std::size_t... Indices>
     struct has_get_impl<T, std::index_sequence<Indices...>>
-      : std::bool_constant<(
-          true && ...
-          && (/* is_detected_v< member_get_t, Indices, T> || */
-              is_detected_v<std_get_t, Indices, T>))> {};
+      : std::bool_constant<((is_detected_v<iris_get_t, Indices, T>)&&...)> {};
     template <typename T>
     using has_get =
       has_get_impl<T,
@@ -31,8 +49,7 @@ namespace iris {
     struct has_tuple_element_impl : std::false_type {};
     template <typename T, std::size_t... Indices>
     struct has_tuple_element_impl<T, std::index_sequence<Indices...>>
-      : std::bool_constant<(
-          true && ... && is_detected_v<std::tuple_element, Indices, T>)> {};
+      : std::bool_constant<((is_detected_v<std::tuple_element, Indices, T>)&&...)> {};
     // template <typename T, std::size_t... Indices>
     // struct has_tuple_element_impl<T, std::index_sequence<Indices...>>
     //   : std::conjunction<is_detected<std::tuple_element, Indices, T>...> {};
@@ -46,7 +63,7 @@ namespace iris {
   // clang-format off
   IRIS_DEFINE_UNARY_CONCEPT(is_tuple_like, T,
                             is_detected<std::tuple_size, T>,
-                            is_detected<utility::has_tuple_element, T>,
-                            is_detected<utility::has_get, T>)
+                            is_detected<utility::has_get, T>,
+                            is_detected<utility::has_tuple_element, T>)
   // clang-format on
 } // namespace iris
