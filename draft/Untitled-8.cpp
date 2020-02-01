@@ -20,10 +20,13 @@ int main() {
   equal({{1}, {2}, {3}}, list{list{1}, list{2}, list{3}}) | cout;
   equal({{1}, {2}, {3}}, {{1}, {2}, {3}}) | cout;
 
-  int a[]{1, 2, 3};
-  equal(a, a);
-  using Array = int[];
-  Array b{0, 1, 2, 3, 4};
-  iris::equal(b, Array{0, 1, 2, 3, 4}) | cout;
-  iris::equal(Array{1, 2, 3, 4, 5, 6}, Array{0, 1, 2, 3, 4}) | cout;
+  // using Array = int[];
+  // Array a{1, 2, 3};
+  // iris::equal(Array{1, 2, 3}, Array{1, 2, 3}) | cout;
+  // iris::equal({1, 2, 3}, Array{1, 2, 3}) | cout;
+  int a[2][2]{{1, 2}, {3, 4}};
+  int b[2][2]{{1, 2}, {3, 4}};
+  iris::equal(a, b);
+  // FIXME:
+  // iris::equal(a, {{1, 2}, {3, 4}});
 }

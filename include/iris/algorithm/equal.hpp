@@ -4,26 +4,26 @@
 namespace iris {
   // equal
   namespace algorithm {
-    IRIS_DEFINE_BNARY_CONCEPT(
-      is_weakly_equality_comparable_with, T, U,
-      is_detected_exact<bool, concepts::equal_to_t, std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
-      is_detected_exact<bool, concepts::equal_to_t, std::remove_reference_t<U> const&, std::remove_reference_t<T> const&>,
-      is_detected_exact<bool, concepts::not_equal_to_t, std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
-      is_detected_exact<bool, concepts::not_equal_to_t, std::remove_reference_t<U> const&, std::remove_reference_t<T> const&>)
-    IRIS_DEFINE_UNARY_CONCEPT(
-      is_equality_comparable, T,
-      is_weakly_equality_comparable_with<T, T>)
-    IRIS_DEFINE_BNARY_CONCEPT(
-      is_equality_comparable_with, T, U,
-      is_equality_comparable<T>,
-      is_equality_comparable<U>,
-      is_common_reference_with<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
-      is_equality_comparable<concepts::common_reference_t<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>>,
-      is_weakly_equality_comparable_with<T, U>)
+    // IRIS_DEFINE_BNARY_CONCEPT(
+    //   is_weakly_equality_comparable_with, T, U,
+    //   is_detected_exact<bool, concepts::equal_to_t, std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
+    //   is_detected_exact<bool, concepts::equal_to_t, std::remove_reference_t<U> const&, std::remove_reference_t<T> const&>,
+    //   is_detected_exact<bool, concepts::not_equal_to_t, std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
+    //   is_detected_exact<bool, concepts::not_equal_to_t, std::remove_reference_t<U> const&, std::remove_reference_t<T> const&>)
+    // IRIS_DEFINE_UNARY_CONCEPT(
+    //   is_equality_comparable, T,
+    //   is_weakly_equality_comparable_with<T, T>)
+    // IRIS_DEFINE_BNARY_CONCEPT(
+    //   is_equality_comparable_with, T, U,
+    //   is_equality_comparable<T>,
+    //   is_equality_comparable<U>,
+    //   is_common_reference_with<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>,
+    //   is_equality_comparable<detected_common_reference_t<std::remove_reference_t<T> const&, std::remove_reference_t<U> const&>>,
+    //   is_weakly_equality_comparable_with<T, U>)
   } // namespace algorithm
   template <class T,
             class U,
-            enable_if_t<algorithm::is_equality_comparable_with_v<T, U>> = nullptr>
+            enable_if_t<is_equality_comparable_with_v<T, U> && !std::is_array_v<T>> = nullptr>
   bool equal(const T& lhs, const U& rhs) {
     return lhs == rhs;
   }
@@ -31,7 +31,7 @@ namespace iris {
   bool equal(It1 first1, It2 last1, It3 first2, It4 last2);
   template <class T,
             class U,
-            enable_if_t<!algorithm::is_equality_comparable_with_v<T, U> //
+            enable_if_t<(!is_equality_comparable_with_v<T, U> || std::is_array_v<T>) //
                         && is_range_v<T> && is_range_v<U>> = nullptr>
   bool equal(const T& lhs, const U& rhs) {
     using std::begin, std::end;
@@ -72,14 +72,14 @@ namespace iris {
     return ::iris::equal(begin(lhs), end(lhs), begin(rhs), end(rhs));
   }
   // TODO: overload ↓
-  template <class T, std::size_t M, class U, std::size_t N>
-  constexpr bool equal(const T (&)[M], const U (&)[N]) {
-    return false;
-  }
-  template <class T, std::size_t M, class U>
-  bool equal(const T (&lhs)[M], const U (&rhs)[M]) {
-    return ::iris::equal(std::begin(lhs), std::end(lhs), std::begin(rhs), std::end(rhs));
-  }
+  // template <class T, std::size_t M, class U, std::size_t N>
+  // constexpr bool equal(const T (&)[M], const U (&)[N]) {
+  //   return false;
+  // }
+  // template <class T, std::size_t M, class U>
+  // bool equal(const T (&lhs)[M], const U (&rhs)[M]) {
+  //   return ::iris::equal(std::begin(lhs), std::end(lhs), std::begin(rhs), std::end(rhs));
+  // }
 
   template <class It1, class It2, class It3, class It4>
   bool equal(It1 first1, It2 last1, It3 first2, It4 last2) {
