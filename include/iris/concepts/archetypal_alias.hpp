@@ -63,8 +63,5 @@ namespace iris {
       decltype(std::declval<T>()(std::declval<Args>()...));
     template <typename T, typename U>
     using comma_t = decltype(std::declval<T>(), std::declval<U>());
-
-    template <typename T>
-    using class_type_t = typename T::type;
   } // namespace concepts
 } // namespace iris

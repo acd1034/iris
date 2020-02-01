@@ -24,28 +24,6 @@ namespace iris {
   // template <typename I>
   // using iter_difference_t = detected_t<iterator::class_difference_t, I>;
 
-  template <class T, class = void>
-  struct detected_prefix_increment {};
-  template <class T>
-  struct detected_prefix_increment<T, std::void_t<decltype(++std::declval<T>())>> {
-    using type = decltype(++std::declval<T>());
-  };
-  template <>
-  struct detected_prefix_increment<bool, void> {};
-  template <class T>
-  using detected_prefix_increment_t = detected_t<concepts::class_type_t, detected_prefix_increment<T>>;
-
-  template <class T, class = void>
-  struct detected_postfix_increment {};
-  template <class T>
-  struct detected_postfix_increment<T, std::void_t<decltype(++std::declval<T>())>> {
-    using type = decltype(std::declval<T>()++);
-  };
-  template <>
-  struct detected_postfix_increment<bool, void> {};
-  template <class T>
-  using detected_postfix_increment_t = detected_t<concepts::class_type_t, detected_postfix_increment<T>>;
-
   // clang-format off
   IRIS_DEFINE_UNARY_CONCEPT(is_iterator, I,
                             // 標準はdefault_constructibleを課す(何故?)
@@ -53,8 +31,8 @@ namespace iris {
                             // *i
                             is_detected_dissatisfy<std::is_void, concepts::indirection_t, I&>,
                             // ++i, i++
-                            is_detected_exact<I&, detected_prefix_increment_t, I&>,
-                            is_detected<detected_postfix_increment_t, I&>)
+                            is_detected_exact<I&, concepts::detected_prefix_increment_t, I&>,
+                            is_detected<concepts::detected_postfix_increment_t, I&>)
   IRIS_DEFINE_BNARY_CONCEPT(is_sentinel_for, S, I,
                             // is_iterator<I>,
                             // ==, !=
@@ -70,14 +48,14 @@ namespace iris {
                             is_iterator<I>,
                             // *i = t, *i++ = t. is_assignable_fromは満たさない
                             is_detected_exact<detected_t<concepts::indirection_t, I&>, concepts::assign_t, detected_t<concepts::indirection_t, I&>, T const&>,
-                            is_detected_exact<detected_t<concepts::indirection_t, detected_t<detected_postfix_increment_t, I&>>,
+                            is_detected_exact<detected_t<concepts::indirection_t, detected_t<concepts::detected_postfix_increment_t, I&>>,
                                               concepts::assign_t,
-                                              detected_t<concepts::indirection_t, detected_t<detected_postfix_increment_t, I&>>,
+                                              detected_t<concepts::indirection_t, detected_t<concepts::detected_postfix_increment_t, I&>>,
                                               T const&>)
   IRIS_DEFINE_UNARY_CONCEPT(is_forward_iterator, I,
                             is_input_iterator<I>,
                             // i++
-                            is_detected_exact<I, detected_postfix_increment_t, I&>,
+                            is_detected_exact<I, concepts::detected_postfix_increment_t, I&>,
                             // ==, !=
                             is_equality_comparable<I>)
   IRIS_DEFINE_UNARY_CONCEPT(is_bidirectional_iterator, I,
