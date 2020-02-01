@@ -1,28 +1,14 @@
 #include <bits/stdc++.h>
-#include <iris/concepts.hpp>
-#include <iris/io.hpp>
-inline namespace a {
-  template <class T, std::enable_if_t<!iris::is_equality_comparable_v<T>, std::nullptr_t> = nullptr>
-  bool operator==(const T&, const T&) {
-    std::cout << "global" << std::endl;
-    return true;
-  }
-} // namespace a
-inline namespace b {
-  template <class T, std::enable_if_t<!iris::is_equality_comparable_v<T>, std::nullptr_t> = nullptr>
-  bool operator==(const T&, const T&) {
-    std::cout << "global2" << std::endl;
-    return false;
-  }
-} // namespace b
-
 #include <iostream>
+#include <iris/io.hpp>
+#include <iris/utility.hpp>
 int main() {
-  1 == 2;
-  struct X {};
-  // X{} == X{}; // error
-  using namespace iris::io::ranges;
-  using namespace iris::io::tuple;
-  using namespace iris::io::delegate;
-  std::cout << std::array{1, 2, 3} << std::endl;
+  using namespace iris::tuple_io;
+  std::cout << iris::is_tuple_like_v<int[3]> << std::endl;
+  int a[]{1, 2, 3};
+  std::cout << iris::utility::get<2>(a) << std::endl;
+  using Type = int[];
+  std::cout << iris::utility::get<2>(Type{1, 2, 3}) << std::endl;
+  std::cout << a << std::endl;
+  std::cout << Type{1, 2, 3} << std::endl;
 }

@@ -5,7 +5,7 @@
 
 namespace iris {
   inline namespace io {
-    inline namespace ranges {
+    inline namespace ranges_io {
       // range operator<<
       template <
         class CharT,
@@ -29,10 +29,10 @@ namespace iris {
         for (const auto& x : r) os << std::exchange(dlm, "\n") << x;
         return os;
       }
-    } // namespace ranges
+    } // namespace ranges_io
 
-    inline namespace tuple {
-      using ::iris::io::ranges::operator<<;
+    inline namespace tuple_io {
+      using ::iris::io::ranges_io::operator<<;
       // tuple-like operator<<
       namespace _tuple_print {
         template <class CharT, class Traits, class T, std::size_t... Indicies>
@@ -54,7 +54,7 @@ namespace iris {
       auto& operator<<(std::basic_ostream<CharT, Traits>& os, const T& t) {
         return _tuple_print::tuple_print(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
       }
-    } // namespace tuple
+    } // namespace tuple_io
 
     inline namespace pipe {
       template <class T, class CharT, class Traits>
