@@ -32,27 +32,27 @@ namespace iris {
     } // namespace ranges
 
     inline namespace tuple {
+      using ::iris::io::ranges::operator<<;
       // tuple-like operator<<
-      // namespace detail {
-      template <class CharT, class Traits, class T, std::size_t... Indicies>
-      auto& tuple_print(std::basic_ostream<CharT, Traits>& os,
-                        const T& t,
-                        std::index_sequence<Indicies...>) {
-        const char* dlm = "";
-        using swallow   = std::initializer_list<int>;
-        (void)swallow{
-          (void(os << std::exchange(dlm, " ") << std::get<Indicies>(t)), 0)...};
-        return os;
-      }
-      // } // namespace detail
+      namespace _tuple_print {
+        template <class CharT, class Traits, class T, std::size_t... Indicies>
+        auto& tuple_print(std::basic_ostream<CharT, Traits>& os,
+                          const T& t,
+                          std::index_sequence<Indicies...>) {
+          const char* dlm = "";
+          using swallow   = std::initializer_list<int>;
+          (void)swallow{
+            (void(os << std::exchange(dlm, " ") << std::get<Indicies>(t)), 0)...};
+          return os;
+        }
+      } // namespace _tuple_print
       template <
         class CharT,
         class Traits,
         class T,
         enable_if_t<is_tuple_like_v<T> && !is_range_v<T>> = nullptr>
       auto& operator<<(std::basic_ostream<CharT, Traits>& os, const T& t) {
-        // return detail::tuple_print(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
-        return tuple_print(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
+        return _tuple_print::tuple_print(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
       }
     } // namespace tuple
 
@@ -62,9 +62,5 @@ namespace iris {
         os << t << std::endl;
       }
     } // namespace pipe
-
-    namespace delegate {
-      using ranges::operator<<, tuple::operator<<, pipe::operator|;
-    } // namespace delegate
   }   // namespace io
 } // namespace iris

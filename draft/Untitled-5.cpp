@@ -2,20 +2,20 @@
 #include <iris/experimental/delegate.hpp>
 int main() {
   using std::cout, std::begin, std::list;
-  using namespace std::literals::string_literals;
+  using namespace iris::experimental;
   std::cout << std::boolalpha << "> ";
   list l{0, 1, 2};
   iris::equal(l, l) | cout;
   iris::equal({1, 2, 3}, {1, 2, 3}) | cout;
   iris::equal({{1}, {2}, {3}}, {{1}, {2}, {3}}) | cout;
 
-  list{1, 2, 3, 4, 5} | iris::folded(0, [](auto x, auto y) { return x + y; })
+  list{1, 2, 3, 4, 5} | folded(0, [](auto x, auto y) { return x + y; })
     | cout;
-  l | iris::folded(0, [](auto x, auto y) { return x + y; }) | cout;
+  l | folded(0, [](auto x, auto y) { return x + y; }) | cout;
   list{"hello"s, " "s, "world"s}
-    | iris::folded("!"s, [](auto x, auto y) { return x + y; }) | cout;
+    | folded("!"s, [](auto x, auto y) { return x + y; }) | cout;
 
-  iris::iota_iterator j{"hello"s, [](auto i) { return i + "!"s; }};
+  iota_iterator j{"hello"s, [](auto i) { return i + "!"s; }};
   for (int i = 0; i < 10; ++i) cout << *j++ << " ";
   '\n' | cout;
   using namespace iris;

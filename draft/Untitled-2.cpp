@@ -16,13 +16,13 @@ int main() {
   // nd &&  s
   // nd && ds
   // clang-format off
-  iris::is_detected_satisfy_v<std::is_void, iris::prefix_increment_t, ns::having> | cout;
-  iris::is_detected_satisfy_v<std::is_void, iris::postfix_increment_t, ns::having> | cout;
-  iris::is_detected_satisfy_v<std::is_void, iris::prefix_increment_t, ns::not_having> | cout;
-  iris::is_detected_satisfy_v<std::is_void, iris::postfix_increment_t, ns::not_having> | cout;
+  iris::is_detected_satisfy_v<std::is_void, iris::concepts::prefix_increment_t, ns::having> | cout;
+  iris::is_detected_satisfy_v<std::is_void, iris::concepts::postfix_increment_t, ns::having> | cout;
+  iris::is_detected_satisfy_v<std::is_void, iris::concepts::prefix_increment_t, ns::not_having> | cout;
+  iris::is_detected_satisfy_v<std::is_void, iris::concepts::postfix_increment_t, ns::not_having> | cout;
   cout << std::endl;
-  iris::is_detected_dissatisfy_v<std::is_void, iris::prefix_increment_t, ns::having> | cout;
-  iris::is_detected_dissatisfy_v<std::is_void, iris::postfix_increment_t, ns::having> | cout;
-  iris::is_detected_dissatisfy_v<std::is_void, iris::prefix_increment_t, ns::not_having> | cout;
-  iris::is_detected_dissatisfy_v<std::is_void, iris::postfix_increment_t, ns::not_having> | cout;
+  iris::is_detected_dissatisfy_v<std::is_void, iris::concepts::prefix_increment_t, ns::having> | cout;
+  iris::is_detected_dissatisfy_v<std::is_void, iris::concepts::postfix_increment_t, ns::having> | cout;
+  iris::is_detected_dissatisfy_v<std::is_void, iris::concepts::prefix_increment_t, ns::not_having> | cout;
+  iris::is_detected_dissatisfy_v<std::is_void, iris::concepts::postfix_increment_t, ns::not_having> | cout;
 }
