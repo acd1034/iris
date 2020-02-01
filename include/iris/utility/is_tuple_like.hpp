@@ -1,29 +1,11 @@
 #pragma once
 #include <utility>
 #include <iris/concepts/def_define_concept.hpp>
+#include <iris/utility/get.hpp>
 
 namespace iris {
   // tuple-like
   namespace utility {
-    namespace _get {
-      template <std::size_t I, typename T, enable_if_t<std::is_lvalue_reference_v<T&>> = nullptr>
-      constexpr auto get(T& t) -> decltype(t.template get<I>()) {
-        return t.template get<I>();
-      }
-      template <std::size_t I, typename T, enable_if_t<std::is_lvalue_reference_v<T&>> = nullptr>
-      constexpr auto get(const T& t) -> decltype(t.template get<I>()) {
-        return t.template get<I>();
-      }
-      template <std::size_t I, typename T, enable_if_t<std::is_rvalue_reference_v<T&&>> = nullptr>
-      constexpr auto get(T&& t) -> decltype(t.template get<I>()) {
-        return t.template get<I>();
-      }
-      template <std::size_t I, typename T, enable_if_t<std::is_rvalue_reference_v<T&&>> = nullptr>
-      constexpr auto get(const T&& t) -> decltype(t.template get<I>()) {
-        return t.template get<I>();
-      }
-    } // namespace _get
-
     template <std::size_t I, typename T>
     constexpr decltype(auto) get(T&& t) {
       using ::iris::utility::_get::get;
