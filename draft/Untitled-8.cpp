@@ -27,6 +27,5 @@ int main() {
   int a[2][2]{{1, 2}, {3, 4}};
   int b[2][2]{{1, 2}, {3, 4}};
   iris::equal(a, b);
-  // FIXME:
-  // iris::equal(a, {{1, 2}, {3, 4}});
+  iris::equal(a, {{1, 2}, {3, 4}});
 }
