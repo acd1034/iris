@@ -2,7 +2,6 @@
 # generals
 BreakBeforeBraces: Attach
 ColumnLimit: 0
-# ColumnLimit: 80
 CommentPragmas: '^ comment: '
 ContinuationIndentWidth: 2
 IndentWidth: 2
@@ -27,8 +26,6 @@ AllowShortCaseLabelsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
-# BinPackArguments: false
-# BinPackParameters: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 IncludeCategories:
   - Regex: '^<iris/'

@@ -72,15 +72,17 @@ inline void mm_square(const T& A, const T& B, T& C) {
 }
 
 int main() {
-  constexpr std::size_t N = 512;
-  using Array             = std::array<float, N * N>;
-
-  alignas(16) Array a, c;
-  std::ifstream input("input");
-  for (auto& x : a) input >> x;
-  std::fill(begin(c), end(c), 0);
+  // constexpr std::size_t N = 512;
+  // using Array             = std::array<float, N * N>;
+  // alignas(16) Array a, c;
+  // std::ifstream input("input");
+  // for (auto& x : a) input >> x;
+  // std::fill(begin(c), end(c), 0);
   // std::cout << ts::measure([&]() { mm_square<N>(a, a, c); }) << std::endl;
+
+  std::cout << std::boolalpha //
+            << ts::uniform(0.0, 1).take(5).required([](double) { return true; }) << std::endl;
   ts::uniform test(0.0, 10, 2);
-  std::cout << test.required<2>([](double, double) { return true; });
-  std::cout << test.required([](double d) { std::cout << d << std::endl; return true; });
+  std::cout << test.required([](double d) { std::cout << d << std::endl; return true; }) << std::endl;
+  std::cout << test.required<2>([](double, double) { return true; }) << std::endl;
 }
