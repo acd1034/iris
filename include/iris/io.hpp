@@ -42,7 +42,7 @@ namespace iris {
           const char* dlm = "";
           using swallow   = std::initializer_list<int>;
           (void)swallow{
-            (void(os << std::exchange(dlm, " ") << std::get<Indicies>(t)), 0)...};
+            (void(os << std::exchange(dlm, " ") << get<Indicies>(t)), 0)...};
           return os;
         }
       } // namespace _tuple_print

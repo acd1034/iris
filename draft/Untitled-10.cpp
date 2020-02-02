@@ -9,9 +9,10 @@ int main() {
   using namespace iris::tuple_io;
   std::cout << std::boolalpha << iris::is_tuple_like_v<int[3]> << std::endl;
   int a[]{1, 2, 3};
-  std::cout << iris::utility::get<2>(a) << std::endl;
+  using iris::get;
+  std::cout << get<2>(a) << std::endl;
   using Type = int[];
-  std::cout << iris::utility::get<2>(Type{1, 2, 3}) << std::endl;
+  std::cout << get<2>(Type{1, 2, 3}) << std::endl;
   std::cout << a << std::endl;
   std::cout << Type{1, 2, 3} << std::endl;
 }

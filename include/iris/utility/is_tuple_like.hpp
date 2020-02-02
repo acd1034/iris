@@ -1,5 +1,4 @@
 #pragma once
-#include <utility>
 #include <iris/concepts/def_define_concept.hpp>
 #include <iris/utility/get.hpp>
 
@@ -7,19 +6,13 @@ namespace iris {
   // tuple-like
   namespace utility {
     template <std::size_t I, typename T>
-    constexpr decltype(auto) get(T&& t) {
-      using ::iris::utility::_get::get;
-      return get<I>(std::forward<T>(t));
-    }
-
-    template <std::size_t I, typename T>
-    using iris_get_t = decltype(get<I>(std::declval<T>()));
+    using adl_or_iris_get_t = decltype(get<I>(std::declval<T>()));
 
     template <typename, typename>
     struct has_get_impl : std::false_type {};
     template <typename T, std::size_t... Indices>
     struct has_get_impl<T, std::index_sequence<Indices...>>
-      : std::bool_constant<((is_detected_v<iris_get_t, Indices, T>)&&...)> {};
+      : std::bool_constant<((is_detected_v<adl_or_iris_get_t, Indices, T>)&&...)> {};
     template <typename T>
     using has_get =
       has_get_impl<T,
