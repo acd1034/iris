@@ -1,6 +1,6 @@
 #pragma once
 #include <tuple>
-#include <iris/type_traits.hpp>
+#include <iris/type_traits/type_operation.hpp>
 
 namespace iris {
   template <std::size_t I, typename T, enable_if_t<std::is_lvalue_reference_v<T&>> = nullptr>

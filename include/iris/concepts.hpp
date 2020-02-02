@@ -2,7 +2,6 @@
 #include <iris/concepts/archetypal_alias.hpp>
 #include <iris/concepts/def_define_concept.hpp>
 #include <iris/concepts/special_detected_t.hpp>
-#include <iris/type_traits/common_reference.hpp>
 
 namespace iris {
   // https://en.cppreference.com/w/cpp/concepts
