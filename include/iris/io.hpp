@@ -32,7 +32,7 @@ namespace iris {
     } // namespace ranges_io
 
     inline namespace tuple_io {
-      using ::iris::io::ranges_io::operator<<;
+      using ::iris::ranges_io::operator<<;
       // tuple-like operator<<
       namespace _tuple_print {
         template <class CharT, class Traits, class T, std::size_t... Indicies>
