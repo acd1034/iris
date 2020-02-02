@@ -4,18 +4,18 @@
 
 namespace iris {
   // equal
-  template <class T,
-            class U,
-            enable_if_t<is_equality_comparable_with_v<T, U> && !std::is_array_v<T>> = nullptr>
+  template <class T, class U,
+            enable_if_t<is_equality_comparable_with_v<T, U> //
+                        && !(std::is_array_v<T> || std::is_array_v<U>)> = nullptr>
   bool equal(const T& lhs, const U& rhs) {
     return lhs == rhs;
   }
   template <class It1, class It2, class It3, class It4>
   bool equal(It1 first1, It2 last1, It3 first2, It4 last2);
-  template <class T,
-            class U,
-            enable_if_t<(!is_equality_comparable_with_v<T, U> || std::is_array_v<T>) //
-                        &&is_range_v<T> && is_range_v<U>> = nullptr>
+  template <class T, class U,
+            enable_if_t<(!is_equality_comparable_with_v<T, U>           //
+                         || (std::is_array_v<T> && std::is_array_v<U>)) //
+                        && is_range_v<T> && is_range_v<U>> = nullptr>
   bool equal(const T& lhs, const U& rhs) {
     using std::begin, std::end;
     return ::iris::equal(begin(lhs), end(lhs), begin(rhs), end(rhs));
