@@ -2,6 +2,7 @@
 // #include <iostream>
 #include <optional>
 #include <iris/concepts.hpp>
+#include <iris/type_traits/type_operation.hpp>
 
 // https://github.com/CaseyCarter/cmcstl2/blob/master/include/stl2/detail/semiregular_box.hpp
 // https://en.cppreference.com/w/cpp/ranges/semiregular_wrapper

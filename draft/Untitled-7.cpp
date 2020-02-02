@@ -1,3 +1,4 @@
+#include <iostream>
 #include <iris/experimental/delegate.hpp>
 
 template <class T>

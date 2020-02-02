@@ -1,5 +1,6 @@
 #pragma once
 #include <iris/concepts/def_define_concept.hpp>
+#include <iris/type_traits/is_detected.hpp>
 #include <iris/utility/get.hpp>
 
 namespace iris {

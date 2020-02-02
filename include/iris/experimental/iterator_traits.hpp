@@ -1,6 +1,7 @@
 #pragma once
 #include <iterator>
 #include <iris/iterator.hpp>
+#include <iris/type_traits/type_operation.hpp>
 
 namespace iris {
 

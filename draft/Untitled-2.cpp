@@ -1,3 +1,4 @@
+#include <iostream>
 #include <iris/experimental/delegate.hpp>
 
 namespace ns {

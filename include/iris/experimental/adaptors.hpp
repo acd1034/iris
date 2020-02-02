@@ -1,5 +1,6 @@
 #pragma once
 #include <iris/ranges.hpp>
+#include <iris/type_traits/type_operation.hpp>
 #include <iris/utility/semiregular_box.hpp>
 
 namespace iris {

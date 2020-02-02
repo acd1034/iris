@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>                       // std::basic_ostream
+#include <ostream>                        // std::basic_ostream
 #include <iris/ranges.hpp>                // is_range
 #include <iris/utility/is_tuple_like.hpp> // is_tuple_like
 
@@ -59,7 +59,7 @@ namespace iris {
     inline namespace pipe {
       template <class T, class CharT, class Traits>
       void operator|(const T& t, std::basic_ostream<CharT, Traits>& os) {
-        os << t << std::endl;
+        os << t << '\n';
       }
     } // namespace pipe
   }   // namespace io
