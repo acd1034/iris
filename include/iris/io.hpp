@@ -59,7 +59,7 @@ namespace iris {
     inline namespace pipe {
       template <class T, class CharT, class Traits>
       void operator|(const T& t, std::basic_ostream<CharT, Traits>& os) {
-        os << t << '\n';
+        os << t << std::endl;
       }
     } // namespace pipe
   }   // namespace io
