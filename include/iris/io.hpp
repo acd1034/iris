@@ -1,5 +1,5 @@
 #pragma once
-#include <ostream>                        // std::basic_ostream
+#include <ostream>                        // std::basic_ostream, std::endl
 #include <iris/ranges.hpp>                // is_range
 #include <iris/utility/is_tuple_like.hpp> // is_tuple_like
 
