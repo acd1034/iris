@@ -3,7 +3,6 @@
 #include <iris/type_traits/type_operation.hpp>
 
 namespace iris {
-  // equal
   template <typename T, typename U,
             enable_if_t<is_equality_comparable_with_v<T, U> //
                         && !(std::is_array_v<T> || std::is_array_v<U>)> = nullptr>

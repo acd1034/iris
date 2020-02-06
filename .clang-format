@@ -1,4 +1,4 @@
-# See https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 # generals
 BreakBeforeBraces: Attach
 ColumnLimit: 0

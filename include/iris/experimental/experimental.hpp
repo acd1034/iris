@@ -30,7 +30,4 @@ namespace iris {
     void operator=(scope_exit&&) = delete;
     ~scope_exit() noexcept { fn(); }
   };
-
-  template <typename... Ts>
-  [[deprecated]] void type_of(Ts&&...) {}
 } // namespace iris

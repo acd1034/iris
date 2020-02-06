@@ -4,7 +4,7 @@
 #include <iris/utility/is_tuple_like.hpp> // is_tuple_like
 
 namespace iris {
-  namespace io_impl {
+  namespace _io {
     template <typename T>
     struct is_std_basic_ostream : std::false_type {};
     template <typename CharT, typename Traits>
@@ -21,11 +21,14 @@ namespace iris {
         (void(os << std::exchange(dlm, " ") << get<Indicies>(t)), 0)...};
       return os;
     }
-  } // namespace io_impl
+  } // namespace _io
   template <typename Os, typename T>
   using is_stream_insertable = std::conjunction<
-    io_impl::is_std_basic_ostream<Os>,
-    is_detected_exact<Os&, concepts::bit_left_shift_t, Os&, const T&>>;
+    _io::is_std_basic_ostream<std::remove_reference_t<Os>>,
+    is_detected_exact<std::remove_reference_t<Os>&,
+                      concepts::bit_left_shift_t,
+                      std::remove_reference_t<Os>&,
+                      const std::remove_reference_t<T>&>>;
   template <typename Os, typename T>
   inline constexpr bool is_stream_insertable_v = is_stream_insertable<Os, T>::value;
 
@@ -52,7 +55,7 @@ namespace iris {
       template <typename CharT, typename Traits, typename T,
                 enable_if_t<is_tuple_like_v<T> && !is_range_v<T>> = nullptr>
       auto& operator<<(std::basic_ostream<CharT, Traits>& os, const T& t) {
-        return io_impl::tuple_io_impl(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
+        return _io::tuple_io_impl(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
       }
     } // namespace tuple_io
 

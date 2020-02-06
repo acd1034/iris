@@ -2,7 +2,7 @@
 #include <iris/iterator.hpp>
 
 namespace iris {
-  // See https://en.cppreference.com/w/cpp/ranges
+  // https://en.cppreference.com/w/cpp/ranges
   namespace ranges {
     template <typename R>
     using std_begin_t = decltype(std::begin(std::declval<R>()));

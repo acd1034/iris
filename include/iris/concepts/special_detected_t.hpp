@@ -8,7 +8,7 @@ namespace iris {
     template <typename T>
     using class_type_t = typename T::type;
 
-    // for ugly bool operator++(), operator++(int)
+    // ISO C++17 does not allow incrementing expression of type bool [-Wincrement-bool]
     template <typename T, typename = void>
     struct detected_prefix_increment {};
     template <typename T>

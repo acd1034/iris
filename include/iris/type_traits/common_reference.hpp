@@ -6,7 +6,7 @@
 namespace iris {
   namespace type_traits {
     namespace _common_reference {
-      // See https://ericniebler.github.io/std/wg21/D0022.html
+      // https://ericniebler.github.io/std/wg21/D0022.html
       // clang-format off
     template <class T>
     using __t = typename T::type;
