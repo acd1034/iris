@@ -1,24 +1,25 @@
 #pragma once
+#include <iris/utility/semiregular_box.hpp>
 #include <chrono>
 #include <random>
-#include <iris/utility/semiregular_box.hpp>
 
 namespace iris {
   // compile time type inspector
   template <typename... Ts>
   [[deprecated]] void type_of(Ts&&...) {}
 
+  template <typename clock = std::chrono::high_resolution_clock>
   struct stop_watch {
   private:
-    std::chrono::system_clock::time_point begin, end;
+    typename clock::time_point strt, end;
 
   public:
     stop_watch() = default;
-    void start() { begin = std::chrono::system_clock::now(); }
-    void stop() { end = std::chrono::system_clock::now(); }
+    void start() { strt = clock::now(); }
+    void stop() { end = clock::now(); }
     auto value() {
       return 1e-6 * static_cast<double>( //
-               std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count());
+               std::chrono::duration_cast<std::chrono::microseconds>(end - strt).count());
     }
   };
 
@@ -28,7 +29,7 @@ namespace iris {
                      std::conditional_t<std::is_integral_v<T>,
                                         std::uniform_int_distribution<T>,
                                         std::uniform_real_distribution<T>>>;
-  template <typename T, typename Engine = std::mt19937,
+  template <typename T, typename Engine = std::mt19937, // should be std::default_random_engine?
             enable_if_t<std::is_arithmetic_v<T>> = nullptr>
   struct urng {
   private:
@@ -41,13 +42,13 @@ namespace iris {
       : dist{std::in_place, std::min(min, max), std::max(min, max)} {}
     void operator=(const urng&) = delete;
     void operator=(urng&&) = delete;
-    auto operator()() -> decltype(dist->operator(engine)) {
-      return dist->operator(engine);
+    auto operator()() -> decltype(dist->operator()(engine)) {
+      return dist->operator()(engine);
     }
-    auto min() -> decltype(dist->min();) {
+    auto min() -> decltype(dist->min()) {
       return dist->min();
     }
-    auto max() -> decltype(dist->max();) {
+    auto max() -> decltype(dist->max()) {
       return dist->max();
     }
     void set_range(result_type min, result_type max) {
