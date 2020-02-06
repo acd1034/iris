@@ -17,7 +17,7 @@ namespace iris {
     stop_watch() = default;
     void start() { strt = clock::now(); }
     void stop() { end = clock::now(); }
-    auto value() {
+    auto seconds() {
       return 1e-6 * static_cast<double>( //
                std::chrono::duration_cast<std::chrono::microseconds>(end - strt).count());
     }
