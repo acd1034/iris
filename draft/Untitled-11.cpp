@@ -1,15 +1,15 @@
 #include <bits/stdc++.h>
 #include <iris/type_traits.hpp>
 namespace ts {
-  template <class... Ts>
+  template <typename... Ts>
   [[deprecated]] void type_of(Ts&&...) {}
 
-  template <class T, std::size_t... Indicies>
+  template <typename T, std::size_t... Indicies>
   inline void measure_impl(T&& task, std::index_sequence<Indicies...>) {
     using swallow = std::initializer_list<std::size_t>;
     (void)swallow{(void(task()), Indicies)...};
   }
-  template <std::size_t N = 1, class T>
+  template <std::size_t N = 1, typename T>
   double measure(T&& task) {
     std::chrono::system_clock::time_point start, end;
     start = std::chrono::system_clock::now();
@@ -19,14 +19,14 @@ namespace ts {
              std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
   }
 
-  template <class T>
+  template <typename T>
   using uniform_distribution = //
     std::enable_if_t<std::is_arithmetic_v<T>,
                      std::conditional_t<std::is_integral_v<T>,
                                         std::uniform_int_distribution<T>,
                                         std::uniform_real_distribution<T>>>;
 
-  template <class T>
+  template <typename T>
   struct uniform {
   private:
     T min, max;
@@ -34,7 +34,7 @@ namespace ts {
     std::mt19937 mt{std::random_device{}()};
     uniform_distribution<T> dist{min, max};
 
-    template <class Pred, std::size_t... Indices>
+    template <typename Pred, std::size_t... Indices>
     bool required_impl(Pred&& pred, std::index_sequence<Indices...>) {
       return std::forward<Pred>(pred)((void(Indices), dist(mt))...);
     }
@@ -50,7 +50,7 @@ namespace ts {
       return *this;
     }
 
-    template <int N = 1, class Pred>
+    template <int N = 1, typename Pred>
     bool required(Pred&& pred) {
       bool result = true;
       for (std::size_t i = 0; i < limit && result; ++i)
@@ -60,7 +60,7 @@ namespace ts {
   };
 } // namespace ts
 
-template <std::size_t N, class T>
+template <std::size_t N, typename T>
 inline void mm_square(const T& A, const T& B, T& C) {
   for (std::size_t i = 0; i < N; ++i) {
     for (std::size_t k = 0; k < N; ++k) {

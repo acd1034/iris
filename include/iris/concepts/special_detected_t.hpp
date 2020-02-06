@@ -9,26 +9,26 @@ namespace iris {
     using class_type_t = typename T::type;
 
     // for ugly bool operator++(), operator++(int)
-    template <class T, class = void>
+    template <typename T, typename = void>
     struct detected_prefix_increment {};
-    template <class T>
+    template <typename T>
     struct detected_prefix_increment<T, std::void_t<decltype(++std::declval<T>())>> {
       using type = decltype(++std::declval<T>());
     };
     template <>
     struct detected_prefix_increment<bool, void> {};
-    template <class T>
+    template <typename T>
     using detected_prefix_increment_t = detected_t<concepts::class_type_t, detected_prefix_increment<T>>;
 
-    template <class T, class = void>
+    template <typename T, typename = void>
     struct detected_postfix_increment {};
-    template <class T>
+    template <typename T>
     struct detected_postfix_increment<T, std::void_t<decltype(++std::declval<T>())>> {
       using type = decltype(std::declval<T>()++);
     };
     template <>
     struct detected_postfix_increment<bool, void> {};
-    template <class T>
+    template <typename T>
     using detected_postfix_increment_t = detected_t<concepts::class_type_t, detected_postfix_increment<T>>;
 
     template <typename T, typename U>

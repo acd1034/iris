@@ -7,21 +7,21 @@
 // https://github.com/CaseyCarter/cmcstl2/blob/master/include/stl2/detail/semiregular_box.hpp
 // https://en.cppreference.com/w/cpp/ranges/semiregular_wrapper
 namespace iris {
-  template <class T,
-            class = std::enable_if_t<
+  template <typename T,
+            typename = std::enable_if_t<
               std::is_move_constructible_v<T> && std::is_copy_constructible_v<T>>>
   struct semiregular_box;
 
   namespace utility {
-    template <class>
+    template <typename>
     struct is_semiregular_box : std::false_type {};
-    template <class T>
+    template <typename T>
     struct is_semiregular_box<semiregular_box<T>> : std::true_type {};
-    template <class T>
+    template <typename T>
     inline constexpr bool is_semiregular_box_v = is_semiregular_box<T>::value;
   } // namespace utility
 
-  template <class T, class>
+  template <typename T, typename>
   struct semiregular_box : std::optional<T> {
   private:
     using Base = std::optional<T>;
@@ -33,15 +33,15 @@ namespace iris {
     }
 
   public:
-    template <class, class>
+    template <typename, typename>
     friend struct semiregular_box;
-    template <class U                                         = T,
+    template <typename U                                         = T,
               enable_if_t<std::is_default_constructible_v<U>> = nullptr>
     constexpr semiregular_box() noexcept(std::is_nothrow_constructible_v<T>)
       : Base{std::in_place} {
       // std::cout << "dconst" << std::endl;
     }
-    template <class U                                          = T,
+    template <typename U                                          = T,
               enable_if_t<!std::is_default_constructible_v<U>> = nullptr>
     constexpr semiregular_box() noexcept : Base{} {
       // std::cout << "ndconst" << std::endl;
@@ -49,19 +49,19 @@ namespace iris {
 
     semiregular_box(semiregular_box&&)      = default;
     semiregular_box(const semiregular_box&) = default;
-    template <class U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
+    template <typename U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
     constexpr semiregular_box(semiregular_box<U>&& rhs) noexcept(
       std::is_nothrow_move_constructible_v<T>)
       : Base{std::move(rhs).base()} {
       // std::cout << "mconst_from_box" << std::endl;
     }
-    template <class U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
+    template <typename U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
     constexpr semiregular_box(const semiregular_box<U>& rhs) noexcept(
       std::is_nothrow_copy_constructible_v<T>)
       : Base{rhs.base()} {
       // std::cout << "cconst_from_box" << std::endl;
     }
-    template <class U,
+    template <typename U,
               enable_if_t<
                 std::is_convertible_v<U, T> && std::is_rvalue_reference_v<U&&>> = nullptr>
     constexpr explicit semiregular_box(U&& rhs) noexcept(
@@ -69,19 +69,19 @@ namespace iris {
       : Base{std::in_place, std::move(rhs)} {
       // std::cout << "mconst_from_U" << std::endl;
     }
-    template <class U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
+    template <typename U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
     constexpr explicit semiregular_box(const U& rhs) noexcept(
       std::is_nothrow_copy_constructible_v<T>)
       : Base{std::in_place, rhs} {
       // std::cout << "cconst_from_U" << std::endl;
     }
 
-    template <class... Args,
+    template <typename... Args,
               enable_if_t<is_constructible_from_v<T, Args...>> = nullptr>
     constexpr semiregular_box(std::in_place_t, Args&&... args) noexcept(
       std::is_nothrow_constructible_v<T, Args...>)
       : Base{std::in_place, std::forward<Args>(args)...} {}
-    template <class U, class... Args,
+    template <typename U, typename... Args,
               enable_if_t<
                 is_constructible_from_v<T, std::initializer_list<U>, Args...>> = nullptr>
     constexpr semiregular_box(
@@ -92,7 +92,7 @@ namespace iris {
       : Base{std::in_place, l, std::forward<Args>(args)...} {}
 
   private:
-    template <class U, enable_if_t<
+    template <typename U, enable_if_t<
                          utility::is_semiregular_box_v<remove_cvref_t<U>>> = nullptr>
     constexpr semiregular_box& assign_semiregular_box(U&& rhs) noexcept(
       (std::is_rvalue_reference_v<U&&> //
@@ -122,18 +122,18 @@ namespace iris {
       noexcept(assign_semiregular_box(rhs))) {
       return assign_semiregular_box(rhs);
     }
-    template <class U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
+    template <typename U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
     constexpr semiregular_box& operator=(semiregular_box<U>&& rhs) noexcept(
       noexcept(assign_semiregular_box(std::move(rhs)))) {
       return assign_semiregular_box(std::move(rhs));
     }
-    template <class U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
+    template <typename U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
     constexpr semiregular_box& operator=(const semiregular_box<U>& rhs) noexcept(
       noexcept(assign_semiregular_box(rhs))) {
       return assign_semiregular_box(rhs);
     }
 
-    template <class U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
+    template <typename U, enable_if_t<std::is_convertible_v<U, T>> = nullptr>
     constexpr semiregular_box& operator=(U&& rhs) noexcept(
       (std::is_rvalue_reference_v<U&&> && //
        (std::is_nothrow_move_assignable_v<T> || std::is_nothrow_move_constructible_v<T>))
@@ -150,6 +150,6 @@ namespace iris {
       return *this;
     }
   };
-  template <class T>
+  template <typename T>
   semiregular_box(T)->semiregular_box<T>;
 } // namespace iris

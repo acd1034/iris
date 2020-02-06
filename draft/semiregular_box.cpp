@@ -24,7 +24,7 @@ namespace cmcstl2 {
     // If T models move_constructible, semiregular_box<T> models movable &&
     // default_initializable (so-called "move_semiregular"). If T models
     // copy_constructible, semiregular_box<T> models semiregular.
-    template <class T>
+    template <typename T>
     // template <ext::move_constructible_object T>
     struct semiregular_box {
       semiregular_box() = default;
@@ -37,7 +37,7 @@ namespace cmcstl2 {
         std::is_nothrow_constructible_v<T, U>)
         : o_{std::in_place, static_cast<U&&>(u)} {}
 
-      template <class... Args>
+      template <typename... Args>
       requires constructible_from<T, Args...> constexpr semiregular_box(
         std::in_place_t,
         Args&&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
@@ -113,20 +113,20 @@ namespace cmcstl2 {
       std::optional<T> o_;
     };
 
-    template <class T>
+    template <typename T>
     // template <semiregular T>
     // requires ext::object<T>
     struct semiregular_box<T> : ebo_box<T, semiregular_box<T>> {
       using semiregular_box::ebo_box::ebo_box;
 
-      template <class... Args>
+      template <typename... Args>
       requires constructible_from<T, Args...> constexpr semiregular_box(
         std::in_place_t,
         Args&&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
         : semiregular_box::ebo_box{static_cast<Args&&>(args)...} {}
     };
 
-    template <class T>
+    template <typename T>
     semiregular_box(T)->semiregular_box<T>;
   } // namespace detail
 } // namespace cmcstl2

@@ -2,7 +2,7 @@
 
 namespace iris {
   struct identity {
-    template <class T>
+    template <typename T>
     constexpr T&& operator()(T&& t) const noexcept(
       noexcept(std::forward<T>(t))) {
       return std::forward<T>(t);
@@ -10,9 +10,9 @@ namespace iris {
   };
 
   // https://en.cppreference.com/w/cpp/utility/variant/visit
-  template <class... Ts>
+  template <typename... Ts>
   struct overloaded : Ts... { using Ts::operator()...; };
-  template <class... Ts>
+  template <typename... Ts>
   overloaded(Ts...)->overloaded<Ts...>;
 
   template <typename Fn>
@@ -31,6 +31,6 @@ namespace iris {
     ~scope_exit() noexcept { fn(); }
   };
 
-  template <class... Ts>
+  template <typename... Ts>
   [[deprecated]] void type_of(Ts&&...) {}
 } // namespace iris

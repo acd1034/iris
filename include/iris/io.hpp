@@ -8,9 +8,9 @@ namespace iris {
     inline namespace ranges_io {
       // range operator<<
       template <
-        class CharT,
-        class Traits,
-        class R,
+        typename CharT,
+        typename Traits,
+        typename R,
         enable_if_t<
           is_range_v<R> && !is_range_v<range_value_t<R>>> = nullptr>
       auto& operator<<(std::basic_ostream<CharT, Traits>& os, const R& r) {
@@ -19,9 +19,9 @@ namespace iris {
         return os;
       }
       template <
-        class CharT,
-        class Traits,
-        class R,
+        typename CharT,
+        typename Traits,
+        typename R,
         enable_if_t<
           is_range_v<R> && is_range_v<range_value_t<R>>> = nullptr>
       auto& operator<<(std::basic_ostream<CharT, Traits>& os, const R& r) {
@@ -35,7 +35,7 @@ namespace iris {
       using ::iris::ranges_io::operator<<;
       // tuple-like operator<<
       namespace _tuple_print {
-        template <class CharT, class Traits, class T, std::size_t... Indicies>
+        template <typename CharT, typename Traits, typename T, std::size_t... Indicies>
         auto& tuple_print(std::basic_ostream<CharT, Traits>& os,
                           const T& t,
                           std::index_sequence<Indicies...>) {
@@ -47,9 +47,9 @@ namespace iris {
         }
       } // namespace _tuple_print
       template <
-        class CharT,
-        class Traits,
-        class T,
+        typename CharT,
+        typename Traits,
+        typename T,
         enable_if_t<is_tuple_like_v<T> && !is_range_v<T>> = nullptr>
       auto& operator<<(std::basic_ostream<CharT, Traits>& os, const T& t) {
         return _tuple_print::tuple_print(os, t, std::make_index_sequence<std::tuple_size_v<T>>{});
@@ -57,7 +57,7 @@ namespace iris {
     } // namespace tuple_io
 
     inline namespace pipe {
-      template <class T, class CharT, class Traits>
+      template <typename T, typename CharT, typename Traits>
       void operator|(const T& t, std::basic_ostream<CharT, Traits>& os) {
         os << t << std::endl;
       }
