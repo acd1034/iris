@@ -1,147 +1,61 @@
 #define CATCH_CONFIG_MAIN
-#include <bits/stdc++.h>
 #include <catch.hpp>
 #include <iris/algorithm.hpp>
 #include <iris/experimental/iterator_traits.hpp>
-#include <iris/iterator.hpp>
-#include <iris/ranges.hpp>
-#include <iris/utility.hpp>
+#include "test_include.hpp"
 
-namespace ns {
-  struct mini_iter {
-    using difference_type = int;
-    using value_type      = int;
-    int i                 = 0;
-    int operator*() const { return i; }
-    int const* operator->() const { return std::addressof(i); }
-    mini_iter& operator++() { return *this; }
-    mini_iter operator++(int) {
-      auto result = *this;
-      return result;
-    }
-  };
-  bool operator==(mini_iter const&, mini_iter const&);
-  bool operator!=(mini_iter const&, mini_iter const&);
-} // namespace ns
-
-TEST_CASE("iterator concept", "[iterator]") {
-  // clang-format off
-  static_assert( iris::is_output_iterator_v<std::ostream_iterator<int>, int>);
-  static_assert( iris::is_output_iterator_v<std::back_insert_iterator<std::forward_list<int>>, int>);
-  static_assert( iris::is_output_iterator_v<std::forward_list<int>::iterator, int>);
-  static_assert(!iris::is_output_iterator_v<std::move_iterator<std::forward_list<int>::iterator>, int>);
-
-  static_assert(!iris::is_input_iterator_v<int*>);
-  static_assert( iris::is_input_iterator_v<std::istream_iterator<int>>);
-  static_assert( iris::is_forward_iterator_v<std::istream_iterator<int>>);
-  static_assert( iris::is_forward_iterator_v<std::forward_list<int>::iterator>);
-  static_assert( iris::is_forward_iterator_v<ns::mini_iter>);
-  static_assert(!iris::is_bidirectional_iterator_v<std::forward_list<int>::iterator>);
-  static_assert(!iris::is_bidirectional_iterator_v<ns::mini_iter>);
-  static_assert( iris::is_bidirectional_iterator_v<std::list<int>::iterator>);
-  static_assert( iris::is_bidirectional_iterator_v<std::move_iterator<std::list<int>::iterator>>);
-  static_assert( iris::is_bidirectional_iterator_v<std::reverse_iterator<std::list<int>::iterator>>);
-  static_assert(!iris::is_random_access_iterator_v<std::list<int>::iterator>);
-  static_assert(!iris::is_random_access_iterator_v<std::move_iterator<std::list<int>::iterator>>);
-  static_assert(!iris::is_random_access_iterator_v<std::reverse_iterator<std::list<int>::iterator>>);
-  static_assert( iris::is_random_access_iterator_v<std::vector<int>::iterator>);
-
-  static_assert( iris::is_forward_range_v<std::forward_list<int>>);
-  static_assert(!iris::is_bidirectional_range_v<std::forward_list<int>>);
-  static_assert( iris::is_bidirectional_range_v<std::list<int>>);
-  static_assert(!iris::is_random_access_range_v<std::list<int>>);
-  static_assert( iris::is_random_access_range_v<std::vector<int>>);
-  // clang-format on
+TEMPLATE_TEST_CASE("iterator traits forward", "[iterator][traits][forward]",
+                   int[], std::forward_list<int>, std::list<int>, std::vector<int>) {
+  TestType a{0, 1, 2, 3, 4};
+  using std::begin, std::end;
+  auto i       = begin(a);
+  using traits = iris::iterator_traits<decltype(i)>;
+  static_assert(std::is_base_of_v<std::forward_iterator_tag, typename traits::iterator_category>);
+  CHECK(traits::deref(i) == 0);
+  CHECK(traits::distance(i, end(a)) == 5);
+  CHECK(traits::deref(traits::advance(i)) == 1);
+  CHECK(traits::deref(i) == 1);
+  CHECK(traits::deref(traits::next(i)) == 2);
+  CHECK(traits::deref(i) == 1);
+  CHECK(traits::at(i, 2) == 3);
+  CHECK(iris::equal(a, TestType{0, 1, 2, 3, 4}));
+  int n = -1;
+  traits::assign(i, n);
+  CHECK(traits::deref(i) == -1);
+  CHECK(iris::equal(a, TestType{0, -1, 2, 3, 4}));
 }
-
-TEST_CASE("iterator operation", "[iterator]") {
-  // clang-format off
-  {
-    using Array = std::forward_list<int>;
-    Array a{0,1,2,3,4};
-    auto i = std::begin(a);
-    using It = decltype(i);
-    static_assert(std::is_same_v<iris::iterator_traits<It>::iterator_category, std::forward_iterator_tag>);
-    CHECK(iris::iterator_traits<It>::deref(i) == 0);
-    CHECK(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
-    CHECK(iris::iterator_traits<It>::deref(i) == 1);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
-    CHECK(iris::iterator_traits<It>::deref(i) == 1);
-    CHECK(iris::iterator_traits<It>::at(i, 2) == 3);
-    CHECK(a == Array{0,1,2,3,4});
-    int n = -1;
-    iris::iterator_traits<It>::assign(i, n);
-    CHECK(iris::iterator_traits<It>::deref(i) == -1);
-    CHECK(a == Array{0,-1,2,3,4});
-  }
-  {
-    using Array = std::forward_list<int>;
-    Array a{0,1,2,3,4};
-    using It = decltype(std::begin(a));
-    static_assert(std::is_same_v<iris::iterator_traits<It>::iterator_category, std::forward_iterator_tag>);
-    CHECK(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
-    CHECK(iris::iterator_traits<It>::distance(std::begin(a), std::end(a)) == 5);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(std::begin(a))) == 1);
-    CHECK(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(std::begin(a))) == 1);
-    CHECK(iris::iterator_traits<It>::deref(std::begin(a)) == 0);
-    iris::iterator_traits<It>::at(std::begin(a),2) = -1;
-    CHECK(a == Array{0,1,-1,3,4});
-    iris::iterator_traits<It>::assign(std::begin(a), -1);
-    CHECK(iris::iterator_traits<It>::deref(std::begin(a)) == -1);
-    CHECK(a == Array{-1,1,-1,3,4});
-  }
-  {
-    using Array = std::list<int>;
-    Array a{0,1,2,3,4};
-    auto i = std::begin(a);
-    using It = decltype(i);
-    static_assert(std::is_same_v<iris::iterator_traits<It>::iterator_category, std::bidirectional_iterator_tag>);
-    CHECK(iris::iterator_traits<It>::deref(i) == 0);
-    CHECK(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
-    CHECK(iris::iterator_traits<It>::deref(i) == 1);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
-    CHECK(iris::iterator_traits<It>::deref(i) == 1);
-    CHECK(iris::iterator_traits<It>::at(i, 2) == 3);
-    CHECK(a == Array{0,1,2,3,4});
-    iris::iterator_traits<It>::assign(i, -1);
-    CHECK(iris::iterator_traits<It>::deref(i) == -1);
-    CHECK(a == Array{0,-1,2,3,4});
-  }
-  {
-    using Array = std::list<int>;
-    Array a{0,1,2,3,4};
-    auto i = std::end(a);
-    using It = decltype(i);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::retreat(i)) == 4);
-    CHECK(iris::iterator_traits<It>::deref(i) == 4);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::prev(i)) == 3);
-    CHECK(iris::iterator_traits<It>::deref(i) == 4);
-    CHECK(iris::iterator_traits<It>::at(i, -2) == 2);
-    CHECK(a == Array{0,1,2,3,4});
-    iris::iterator_traits<It>::assign(i, -1);
-    CHECK(iris::iterator_traits<It>::deref(i) == -1);
-    CHECK(a == Array{0,1,2,3,-1});
-  }
-  {
-    using Array = int[];
-    Array a{0,1,2,3,4};
-    auto i = std::begin(a);
-    using It = decltype(i);
-    static_assert(std::is_same_v<iris::iterator_traits<It>::iterator_category, std::random_access_iterator_tag>);
-    CHECK(iris::iterator_traits<It>::deref(i) == 0);
-    CHECK(iris::iterator_traits<It>::distance(i, std::end(a)) == 5);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::advance(i)) == 1);
-    CHECK(iris::iterator_traits<It>::deref(i) == 1);
-    CHECK(iris::iterator_traits<It>::deref(iris::iterator_traits<It>::next(i)) == 2);
-    CHECK(iris::iterator_traits<It>::deref(i) == 1);
-    CHECK(iris::iterator_traits<It>::at(i, 2) == 3);
-    CHECK(iris::equal(a, Array{0,1,2,3,4}));
-    iris::iterator_traits<It>::assign(i, -1);
-    CHECK(iris::iterator_traits<It>::deref(i) == -1);
-    CHECK(iris::equal(a, Array{0,-1,2,3,4}));
-  }
-  // clang-format on
+TEMPLATE_TEST_CASE("iterator traits rvalue", "[iterator][traits][rvalue]",
+                   int[], std::forward_list<int>, std::list<int>, std::vector<int>) {
+  TestType a{0, 1, 2, 3, 4};
+  using std::begin, std::end;
+  using traits = iris::iterator_traits<decltype(begin(a))>;
+  static_assert(std::is_base_of_v<std::forward_iterator_tag, typename traits::iterator_category>);
+  CHECK(traits::deref(begin(a)) == 0);
+  CHECK(traits::distance(begin(a), end(a)) == 5);
+  CHECK(traits::deref(traits::advance(begin(a))) == 1);
+  CHECK(traits::deref(begin(a)) == 0);
+  CHECK(traits::deref(traits::next(begin(a))) == 1);
+  CHECK(traits::deref(begin(a)) == 0);
+  traits::at(begin(a), 2) = -1;
+  CHECK(iris::equal(a, TestType{0, 1, -1, 3, 4}));
+  traits::assign(begin(a), -1);
+  CHECK(traits::deref(begin(a)) == -1);
+  CHECK(iris::equal(a, TestType{-1, 1, -1, 3, 4}));
+}
+TEMPLATE_TEST_CASE("iterator traits bidirectional", "[iterator][traits][bidirectional]",
+                   int[], std::list<int>, std::vector<int>) {
+  TestType a{0, 1, 2, 3, 4};
+  using std::end;
+  auto i       = end(a);
+  using traits = iris::iterator_traits<decltype(i)>;
+  static_assert(std::is_base_of_v<std::bidirectional_iterator_tag, typename traits::iterator_category>);
+  CHECK(traits::deref(traits::retreat(i)) == 4);
+  CHECK(traits::deref(i) == 4);
+  CHECK(traits::deref(traits::prev(i)) == 3);
+  CHECK(traits::deref(i) == 4);
+  CHECK(traits::at(i, -2) == 2);
+  CHECK(iris::equal(a, TestType{0, 1, 2, 3, 4}));
+  traits::assign(i, -1);
+  CHECK(traits::deref(i) == -1);
+  CHECK(iris::equal(a, TestType{0, 1, 2, 3, -1}));
 }
