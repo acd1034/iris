@@ -53,4 +53,4 @@ namespace iris {
                             is_range<R>,
                             is_random_access_iterator<iterator_t<R>>)
   // clang-format on
-}; // namespace iris
+} // namespace iris
