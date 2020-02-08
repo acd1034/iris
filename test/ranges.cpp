@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 #include <iris/ranges.hpp>
-#include "test_include.hpp"
+#include "./include/test_include.hpp"
 static_assert(iris::is_regular_v<mini::strange_t>);
 
 TEMPLATE_TEST_CASE_SIG("range concepts", "[range][concepts]",

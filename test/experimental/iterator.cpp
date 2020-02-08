@@ -2,7 +2,7 @@
 #include <catch.hpp>
 #include <iris/algorithm.hpp>
 #include <iris/experimental/iterator_traits.hpp>
-#include "test_include.hpp"
+#include "../include/test_include.hpp"
 
 TEMPLATE_TEST_CASE("iterator traits forward", "[iterator][traits][forward]",
                    int[], std::forward_list<int>, std::list<int>, std::vector<int>) {

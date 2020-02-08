@@ -2,7 +2,7 @@
 #include <catch.hpp>
 #include <iris/algorithm.hpp>
 #include <iris/experimental/iterator_traits.hpp>
-#include "test_include.hpp"
+#include "./include/test_include.hpp"
 static_assert(iris::is_regular_v<mini::strange_t>);
 
 TEMPLATE_TEST_CASE_SIG("iterator concepts", "[iterator][concepts]",
