@@ -33,7 +33,7 @@ TEMPLATE_TEST_CASE("algorithm equal", "[algorithm][equal]",
   CHECK(!iris::equal(TestType{g(), g(), 3}, {g(), g(), -3}));
   CHECK(!iris::equal(TestType{g(), g(), g()}, {g(), g(), g(), g()}));
 }
-TEMPLATE_TEST_CASE("algorithm equal", "[algorithm][equal]",
+TEMPLATE_TEST_CASE("algorithm equal nested", "[algorithm][equal][nested]",
                    // (std::array<std::array<int, 2>, 3>),
                    std::forward_list<std::forward_list<int>>,
                    std::list<std::list<int>>, std::vector<std::vector<int>>,
