@@ -24,15 +24,3 @@ namespace ns2 {
     return data(std::forward<T>(x));
   }
 } // namespace ns2
-#include <iris/testing.hpp>
-long fibonacci(unsigned n) {
-  if (n < 2) return n;
-  return fibonacci(n - 1) + fibonacci(n - 2);
-}
-int main() {
-  iris::stop_watch w;
-  w.start();
-  std::cout << "f(42) = " << fibonacci(42) << '\n';
-  w.stop();
-  std::cout << w.seconds() << "sec" << '\n';
-}

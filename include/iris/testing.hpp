@@ -1,6 +1,6 @@
 #pragma once
 #include <iris/concepts.hpp>
-#include <iris/utility/semiregular_box.hpp>
+#include <iris/type_traits/type_operation.hpp>
 #include <chrono>
 #include <random>
 
@@ -46,38 +46,41 @@ namespace iris {
     std::is_invocable<G&>,
     is_unsigned_integral<std::invoke_result_t<G&>>,
     is_detected_exact<std::invoke_result_t<G&>, testing::urbg_min_t, G>,
-    is_detected_exact<std::invoke_result_t<G&>, testing::urbg_max_t, G>);
+    is_detected_exact<std::invoke_result_t<G&>, testing::urbg_max_t, G>)
   template <typename T>
   using uniform_distribution =
     std::enable_if_t<std::is_arithmetic_v<T>,
                      std::conditional_t<std::is_integral_v<T>,
                                         std::uniform_int_distribution<T>,
                                         std::uniform_real_distribution<T>>>;
-  template <typename T, typename Engine = std::mt19937, // should be std::default_random_engine?
-            enable_if_t<std::is_arithmetic_v<T>         //
-                        && is_uniform_random_bit_generator_v<Engine>> = nullptr>
+  template <typename T, typename G = std::mt19937, // should be std::default_random_engine?
+            enable_if_t<std::is_arithmetic_v<T>    //
+                        && is_uniform_random_bit_generator_v<G>> = nullptr>
   struct urng {
+    using result_type = T;
+    using engine_type = G;
+    using dist_type   = uniform_distribution<result_type>;
+
   private:
-    Engine engine{std::random_device{}()};
-    semiregular_box<uniform_distribution<T>> dist{};
+    engine_type engine{std::random_device{}()};
+    dist_type dist{};
 
   public:
-    using result_type = T;
     urng(T min, type_identity_t<T> max)
-      : dist{std::in_place, std::min(min, max), std::max(min, max)} {}
+      : dist{std::min(min, max), std::max(min, max)} {}
     void operator=(const urng&) = delete;
     void operator=(urng&&) = delete;
-    auto operator()() -> decltype(dist->operator()(engine)) {
-      return dist->operator()(engine);
+    auto operator()() -> decltype(dist(engine)) {
+      return dist(engine);
     }
-    auto min() -> decltype(dist->min()) {
-      return dist->min();
+    auto min() -> decltype(dist.min()) {
+      return dist.min();
     }
-    auto max() -> decltype(dist->max()) {
-      return dist->max();
+    auto max() -> decltype(dist.max()) {
+      return dist.max();
     }
     void set_range(result_type min, result_type max) {
-      dist.emplace(std::min(min, max), std::max(min, max));
+      dist.param(typename dist_type::param_type{std::min(min, max), std::max(min, max)});
     }
   };
 } // namespace iris
