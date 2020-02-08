@@ -20,9 +20,9 @@
 
 namespace mini {
   template <typename T>
-  using strange_t1 = std::tuple<std::in_place_t, std::vector<T>, std::set<T>, std::map<std::string, T>, std::any, std::optional<T>, std::chrono::system_clock::time_point>;
+  using strange_t1 = std::tuple<std::vector<T>, std::set<T>, std::map<std::string, T>, std::any, std::optional<T>, std::chrono::system_clock::time_point>;
   template <typename T>
-  using strange_t2 = std::function<T(std::variant<std::in_place_t, std::vector<T>, std::set<T>, std::map<std::string, T>, std::any, std::optional<T>, std::chrono::system_clock::time_point>)>;
+  using strange_t2 = std::function<T(std::variant<std::vector<T>, std::set<T>, std::map<std::string, T>, std::any, std::optional<T>, std::chrono::system_clock::time_point>)>;
   using strange_t  = std::pair<strange_t1<strange_t1<int>>, strange_t2<int>>;
 
   struct iter {
