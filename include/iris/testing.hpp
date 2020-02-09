@@ -57,15 +57,13 @@ namespace iris {
             enable_if_t<std::is_arithmetic_v<T>    //
                         && is_uniform_random_bit_generator_v<G>> = nullptr>
   struct urng {
-    using result_type = T;
-    using engine_type = G;
-    using dist_type   = uniform_distribution<result_type>;
-
   private:
-    engine_type engine{std::random_device{}()};
+    using dist_type = uniform_distribution<T>;
+    G engine{std::random_device{}()};
     dist_type dist{};
 
   public:
+    using result_type = T;
     urng(T min, type_identity_t<T> max)
       : dist{std::min(min, max), std::max(min, max)} {}
     void operator=(const urng&) = delete;
