@@ -135,7 +135,7 @@ public:
   constexpr modint& operator/=(modint&& rhs) { return *this *= std::move(rhs).inverse(); }
   constexpr modint& operator/=(sint_type const rhs) { return *this *= inverse(rhs); }
   // public member fn
-  constexpr modint pow(std::uint32_t exp) const& {
+  constexpr modint&& pow(std::uint32_t exp) const& {
     modint base{*this};
     return std::move(base).pow(exp);
   }
@@ -170,8 +170,8 @@ public:
   friend constexpr bool operator>=(modint const& lhs, modint const& rhs) noexcept { return !(lhs < rhs); }
   friend constexpr bool operator>=(modint const& lhs, sint_type const& rhs) noexcept { return !(lhs < rhs); }
   friend constexpr bool operator>=(sint_type const& lhs, modint const& rhs) noexcept { return !(lhs < rhs); }
-  // binary arithmetic op
-  // clang-format off
+// binary arithmetic op
+// clang-format off
   #define IRIS_DEFINE_BINARY_OP(Op)                                                 \
     friend constexpr modint operator Op(modint const& lhs, modint const& rhs) {     \
       modint result{lhs};                                                           \
