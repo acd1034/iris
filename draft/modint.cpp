@@ -28,20 +28,20 @@ constexpr auto extended_euclid(T a, U b) {
 
 template <typename T, T N>
 struct modint {
-  static_assert(std::is_unsigned_v<T>);
-  using value_type             = T;
-  static inline value_type mod = N;
+  static_assert(std::is_arithmetic_v<T>);
+  using sint_type             = std::make_signed_t<T>;
+  using uint_type             = std::make_unsigned_t<T>;
+  static inline sint_type mod = sint_type(N);
 
 private:
-  using sint_type = std::make_signed_t<value_type>;
-  value_type v{0};
+  sint_type v{0};
   // private member fn
-  constexpr value_type normalize(sint_type x) const {
-    x %= sint_type(mod);
-    if (x < 0) x += sint_type(mod);
+  constexpr sint_type normalize(sint_type x) const {
+    x %= mod;
+    if (x < 0) x += mod;
     return x;
   }
-  constexpr value_type inverse(sint_type x) const {
+  constexpr sint_type inverse(sint_type x) const {
     assert(std::gcd(x, mod) == 1);
     return normalize(extended_euclid(x, mod).first);
   }
@@ -51,8 +51,8 @@ public:
   constexpr modint()                  = default;
   constexpr modint(modint const& rhs) = default;
   constexpr modint(modint&& rhs)      = default;
-  constexpr explicit modint(value_type const v) : v{(v >= mod ? v : v % mod)} {} // special
   constexpr explicit modint(sint_type const v) : v{normalize(v)} {}
+  constexpr explicit modint(uint_type const v) : v{(sint_type(v) >= mod ? sint_type(v) : sint_type(v) % mod)} {} // special
   // assignment op
   constexpr modint& operator=(modint const& rhs) = default;
   constexpr modint& operator=(modint&& rhs) = default;
@@ -61,7 +61,8 @@ public:
     return *this;
   }
   // cast
-  constexpr explicit operator value_type() const noexcept { return v; }
+  constexpr explicit operator sint_type() const noexcept { return v; }
+  constexpr explicit operator uint_type() const noexcept { return uint_type(v); }
   // unary arithmetic op
   constexpr modint operator+() const& noexcept { return *this; }
   constexpr modint&& operator+() && noexcept { return std::move(*this); }
@@ -111,7 +112,7 @@ public:
     return *this;
   }
   constexpr modint& operator+=(sint_type const rhs) {
-    v = normalize(sint_type(v) + rhs);
+    v = normalize(v + rhs);
     return *this;
   }
   constexpr modint& operator-=(modint const& rhs) noexcept { return *this += -rhs; }
@@ -128,18 +129,18 @@ public:
     return *this;
   }
   constexpr modint& operator*=(sint_type const rhs) {
-    v = normalize(sint_type(v) * rhs);
+    v = normalize(v * rhs);
     return *this;
   }
   constexpr modint& operator/=(modint const& rhs) { return *this *= rhs.inverse(); }
   constexpr modint& operator/=(modint&& rhs) { return *this *= std::move(rhs).inverse(); }
   constexpr modint& operator/=(sint_type const rhs) { return *this *= inverse(rhs); }
   // public member fn
-  constexpr modint&& pow(std::uint32_t exp) const& {
+  constexpr modint pow(std::size_t exp) const& {
     modint base{*this};
     return std::move(base).pow(exp);
   }
-  constexpr modint pow(std::uint32_t exp) && {
+  constexpr modint pow(std::size_t exp) && {
     if (exp < 0) return std::move(*this).inverse().pow(-exp);
     modint result{1};
     while (exp > 0) {
@@ -152,15 +153,15 @@ public:
 #pragma region friend
   // equality compare
   friend constexpr bool operator==(modint const& lhs, modint const& rhs) noexcept { return lhs.v == rhs.v; }
-  friend constexpr bool operator==(modint const& lhs, sint_type const& rhs) noexcept { return sint_type(lhs.v) == rhs; }
+  friend constexpr bool operator==(modint const& lhs, sint_type const& rhs) noexcept { return lhs.v == rhs; }
   friend constexpr bool operator==(sint_type const& lhs, modint const& rhs) noexcept { return rhs == lhs; }
   friend constexpr bool operator!=(modint const& lhs, modint const& rhs) noexcept { return !(lhs == rhs); }
   friend constexpr bool operator!=(modint const& lhs, sint_type const& rhs) noexcept { return !(lhs == rhs); }
   friend constexpr bool operator!=(sint_type const& lhs, modint const& rhs) noexcept { return !(lhs == rhs); }
   // compare
   friend constexpr bool operator<(modint const& lhs, modint const& rhs) noexcept { return lhs.v < rhs.v; }
-  friend constexpr bool operator<(modint const& lhs, sint_type const& rhs) noexcept { return sint_type(lhs.v) < rhs; }
-  friend constexpr bool operator<(sint_type const& lhs, modint const& rhs) noexcept { return lhs < sint_type(rhs.v); }
+  friend constexpr bool operator<(modint const& lhs, sint_type const& rhs) noexcept { return lhs.v < rhs; }
+  friend constexpr bool operator<(sint_type const& lhs, modint const& rhs) noexcept { return lhs < rhs.v; }
   friend constexpr bool operator>(modint const& lhs, modint const& rhs) noexcept { return rhs < lhs; }
   friend constexpr bool operator>(modint const& lhs, sint_type const& rhs) noexcept { return rhs < lhs; }
   friend constexpr bool operator>(sint_type const& lhs, modint const& rhs) noexcept { return rhs < lhs; }
@@ -214,7 +215,7 @@ public:
   friend auto& operator<<(std::basic_ostream<CharT, Traits>& os, modint const& rhs) { return os << rhs.v; }
   template <typename CharT, typename Traits>
   friend auto& operator>>(std::basic_istream<CharT, Traits>& is, modint& rhs) {
-    value_type v;
+    uint_type v;
     is >> v;
     rhs = modint{v};
     return is;
