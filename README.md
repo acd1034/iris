@@ -1,4 +1,7 @@
 # Lite Concept Library for C++17
+## Documentation
+Click [here](https://acd1034.github.io/iris/html/index.html).
+
 ## Noteworthy Features:
 
 1. metafunctions supporting C++20 `<concepts>`, `<iterator>` and `<ranges>`
@@ -8,8 +11,8 @@
 1. some testing utilities
 
 ## Supported Compilers
-Author's environment:
+The author's environment is:
 
 - Apple clang version 11.0.0 (clang-1100.0.33.8)
 
-may not work on gcc (mainly because of `iris::common_reference`)
+The code does not work on GCC (mainly because of `<iris/concepts>`).
