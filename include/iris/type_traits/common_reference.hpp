@@ -1,9 +1,10 @@
 #pragma once
+#include <iris/type_traits/is_detected.hpp> // is_detected_v
 #include <type_traits>
 #include <utility>
-#include <iris/type_traits/is_detected.hpp> // is_detected_v
 
 namespace iris {
+  /// @cond
   namespace type_traits {
     namespace _common_reference {
       // https://ericniebler.github.io/std/wg21/D0022.html
@@ -183,6 +184,7 @@ namespace iris {
       // clang-format on
     } // namespace _common_reference
   }   // namespace type_traits
+  /// @endcond
   using type_traits::_common_reference::common_reference;
   using type_traits::_common_reference::common_reference_t;
 } // namespace iris
