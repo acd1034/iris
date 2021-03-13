@@ -1,4 +1,4 @@
-/** @file doxygen_test.hpp */
+/** @file test.hpp */
 #include <numeric>
 #include <utility>
 

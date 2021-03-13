@@ -1,0 +1,5 @@
+var structiris_1_1type__traits_1_1detected__or__impl_3_01_default_00_01std_1_1void__t_3_01_op_3_01_ad11b8861fc61396e07b6835ebcc9a559 =
+[
+    [ "type", "structiris_1_1type__traits_1_1detected__or__impl_3_01_default_00_01std_1_1void__t_3_01_op_3_01_ad11b8861fc61396e07b6835ebcc9a559.html#a739afa75ef0bcdb6ee55ea2e32657b45", null ],
+    [ "value_t", "structiris_1_1type__traits_1_1detected__or__impl_3_01_default_00_01std_1_1void__t_3_01_op_3_01_ad11b8861fc61396e07b6835ebcc9a559.html#ac43a449f9d9b3c3ea1faafa61c44245f", null ]
+];
